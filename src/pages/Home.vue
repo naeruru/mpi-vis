@@ -1,84 +1,111 @@
 <template>
-    <v-main>
-        <v-container fluid>
-            <div class="d-flex justify-center">
-                <v-col :sm="12" :md="8" :xl="6">
-                    <h1>Select Options</h1>
-                </v-col>
-            </div>
-            <div class="d-flex justify-center">
-                <v-col :sm="12" :md="8" :xl="6">
-                    <v-card class="pt-6 px-6">
-                        <div d-flex flex-row mb-6>
-                            <v-row>
-                                <v-col>
-                                    <v-select v-model="algorithm" :items="algorithms" label="Algorithm"></v-select>
-                                </v-col>
-                                <v-col>
-                                    <v-select v-model="scheme" :items="schemes" label="Scheme"></v-select>
-                                </v-col>
-                            </v-row>
+    <v-container>
+        <v-row>
+            <v-col :sm="12" :md="2" :xl="2">
+                <v-card rounded="lg">
+                    <v-list>
+                        <v-list-subheader>COLLECTIVES</v-list-subheader>
+                        <v-list-item v-for="(collective, i) in collectives" :key="i" :value="collective"
+                            active-color="primary" rounded="xl"
+                            @click="$router.push({ path: `/c/${collective.redirect}` })">
+                            <v-list-item-title v-text="collective.title"></v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-card>
+            </v-col>
 
-                            <v-row class="pl-2 pb-4">
-                                <div class="text-caption">Number of processes</div>
-                            </v-row>
-                            <v-row class="pb-8">
-                                <v-slider v-model="num_processes" :min="1" :max="10" :step="1" label="num_processes"
-                                    hide-details>
-                                    <template v-slot:prepend>
-                                        <v-text-field v-model="num_processes" type="number" style="width: 80px"
-                                            density="compact" hide-details variant="outlined"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-row>
-
-                            <v-row class="pl-2 pb-4">
-                                <div class="text-caption">Elements per data-block</div>
-                            </v-row>
-                            <v-row class="pb-8">
-                                <v-slider v-model="block_size" :min="1" :max="10" :step="1" label="num_processes" hide-details>
-                                    <template v-slot:prepend>
-                                        <v-text-field v-model="block_size" type="number" style="width: 80px"
-                                            density="compact" hide-details variant="outlined"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-row>
-                        </div>
-                        <div class="d-flex justify-end mb-6">
-                            <v-btn color="primary" @click="startVis">Run</v-btn>
-                        </div>
-                    </v-card>
-                </v-col>
-            </div>
-        </v-container>
-        <v-footer app>
-            <v-card width=100% class="text-end">
-                anonymous
-            </v-card>
-        </v-footer>
-    </v-main>
+            <v-col v-if="$route.params.id">
+                <v-card min-height="70vh" rounded="lg">
+                    <router-view name="Collective"></router-view>
+                </v-card>
+            </v-col>
+            <v-col v-else>
+                <v-card class="mb-6" rounded="lg">
+                    <v-card-title>MPI Visualizer</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
+                        beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
+                        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                        Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                        sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat
+                        voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit
+                        laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui
+                        in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat
+                        quo voluptas nulla pariatur?
+                    </v-card-text>
+                </v-card>
+                <v-card>
+                    <v-card-title>Related Publications</v-card-title>
+                    <v-divider></v-divider>
+                    <v-table>
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    Title
+                                </th>
+                                <th class="text-left">
+                                    Author
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in publications" :key="item.name" class="clickable" v-on:click="openLink(item.link)">
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.author }}</td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
-
 export default {
-    name: 'Home',
-
     data: () => ({
-        algorithm: 'Bruck',
-        algorithms: ['Bruck'],
-
-        scheme: 'Uniform',
-        schemes: ['Uniform', 'Non-Uniform'],
-
-        num_processes: 6,
-
-        block_size: 2,
+        collectives: [
+            // { type: 'subheader', title: 'Collectives' },
+            { title: 'All to all', id: 1, redirect: 'alltoall' },
+            { title: 'All reduce', id: 2, redirect: 'allreduce' },
+            { title: 'All gather', id: 3, redirect: 'allgather' },
+            { title: '...', id: 4, },
+        ],
+        publications: [
+            {
+                title: 'publication 1',
+                author: 'Jane',
+                link: ''
+            },
+            {
+                title: 'publication 2',
+                author: 'Jane',
+                link: ''
+            },
+            {
+                title: 'publication 3',
+                author: 'Jane',
+                link: ''
+            },
+            {
+                title: 'publication 4',
+                author: 'Jane',
+                link: ''
+            },
+        ]
     }),
     methods: {
-        startVis () {
-            this.$router.push({ name: 'visualize' })
+        openLink(link) {
+            window.open(link, '_blank')
         }
     }
 }
 </script>
+
+<style>
+.clickable {
+  cursor: pointer;
+}
+</style>
