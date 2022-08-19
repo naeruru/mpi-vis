@@ -25,7 +25,7 @@ const routes = [
     ]
   },
   {
-    path: '/visualize',
+    path: '/vis/:collective/:algorithm',
     name: 'visualize',
     components: {
       default: Visualize,

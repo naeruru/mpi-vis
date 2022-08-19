@@ -17,53 +17,52 @@
                 qui dolorem eum fugiat quo voluptas nulla pariatur?
             </v-card-text>
             <v-card-title>Click on an algorithm to get started</v-card-title>
-            <v-divider></v-divider>
-            <apexchart width="100%" type="area" :options="chartOptions" :series="series"></apexchart>
+            <v-divider class="mb-4"></v-divider>
+            <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart>
         </v-card>
     </v-container>
 </template>
 
 <script>
 
+import collectives from "../data/collectives.json";
+
 export default {
     data: () => ({
-        collectives: {
-            'alltoall': {
-                id: 1,
-                name: "All to All",
-            },
-            'allreduce': {
-                id: 1,
-                name: "All Reduce",
-            },
-            'allgather': {
-                id: 1,
-                name: "All Gather",
-            },
-        },
+        "collectives": collectives,
 
         chartOptions: {
             chart: {
-                id: "vuechart-example",
-                background: "transparent"
-            },
-            xaxis: {
-                categories: [1, 2, 3, 4, 5, 6, 7, 8],
+                id: "collective",
+                type: "area",
+                background: "transparent",
+                toolbar: {
+                    show: false
+                }
             },
             theme: {
-                mode: 'dark'
-            }
-        },
-        series: [
-            {
-                name: "series-1",
-                data: [30, 40, 45, 50, 52, 60, 70, 91],
+                mode: 'dark',
+                palette: 'palette10'
             },
-            {
-                name: "series-2",
-                data: [30, 32, 35, 45, 49, 60, 90, 110],
+            legend: {
+                position: 'top',
+                fontSize: '18px'
+            },
+            xaxis: {
+                title: { text: 'Communicator size', style: { fontSize: '14px'} }
+            },
+            yaxis: {
+                title: { text: 'Total data size', style: { fontSize: '14px'}  }
             }
-        ],
-    })
+        }
+    }),
+    methods: {
+         legendClicked (event, chartContext, config) {
+            
+            const selectedCollective = collectives[this.$route.params.id]
+            const selectedAlgorithm = selectedCollective.algorithms[chartContext]
+            this.$router.push({ path: `/vis/${selectedCollective.id}/${chartContext}` })
+        }
+    }
 }
 </script>
