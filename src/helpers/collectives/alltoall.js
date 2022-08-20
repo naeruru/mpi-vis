@@ -6,12 +6,13 @@ export default {
         return new Promise((resolve, reject) => {
 
             const toReturn = {
+                done: false,
                 k: k,
                 step: null
             }
 
             // final comm step k was reached and completed
-            if (step.substep === 2 && k === Math.round(Math.log(num_processes))) {
+            if (step.substep === 2 && k === Math.ceil(Math.log2(num_processes)) - 1) {
                 step.id = 2
             }
 
@@ -39,12 +40,18 @@ export default {
                         toReturn.k = k
                         step.substep = 0
 
-                        // clean adj matrix
-                        data.map(p => p.statuses.map(thisStatus => {
-                            if (thisStatus.status !== 0)
-                                thisStatus.status = 3
-                            return thisStatus
-                        }))
+                        // clean marked
+
+                        // clean adj matrix and marked
+                        data.map(p => {
+                            p.statuses.map(thisStatus => {
+                                if (thisStatus.status !== 0)
+                                    thisStatus.status = 3
+                                return thisStatus
+                            })
+                            p.blocks.map(block => block.status = 0)
+                            return p
+                        })
                     }
                     
                     if (step.substep === 0) {
@@ -97,7 +104,7 @@ export default {
                             current.forEach((object, index) => {
                                 next[index].id = object.id
                                 next[index].color = object.color
-                                next[index].status = 0
+                                next[index].status = 2
                             })
 
                             //adj matrix update
@@ -120,8 +127,11 @@ export default {
 
                     data.map((p) => {
                         p.blocks.sort((a, b) => (a.id > b.id) ? 1 : -1)
+                        p.blocks.map(block => block.status = 0)
+                        return p
                     })
 
+                    toReturn.done = true
                     toReturn.step = {
                         id: 3,
                         substep: 0, // curr k is done

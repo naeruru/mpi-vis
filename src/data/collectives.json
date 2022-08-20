@@ -6,7 +6,8 @@
             {
                 "id": "bruck",
                 "name": "Bruck",
-                "data": [[1, 30], [2, 40], [3, 45], [4, 50], [5, 52], [6, 60], [7, 70], [8, 91]],
+                "data": [[2, 1], [4, 2], [8, 3], [16, 4], [32, 5]],
+                "scheme": ["Uniform", "Nonuniform"],
                 "info": {
                     "rotationphase": "<code>S[i] = S[i+p] (p: rank)</code>",
                     "commstep": "In each communication step k, process i sends to rank (<code>i + 2<sup>k</sup></code>) all the data blocks whose kth bit is 1, receives data from rank (<code>i − 2<sup>k</sup></code>), and stores the incoming data into blocks whose kth bit is 1 (that is, overwriting the data that was just sent).",
@@ -16,7 +17,7 @@
             {
                 "id": "spreadout",
                 "name": "Spread Out",
-                "data": [[1, 30], [2, 32], [3, 35], [4, 45], [5, 49], [6, 60], [7, 90], [8, 110]]
+                "data": [[2, 2], [4, 4], [8, 8], [16, 16], [32, 32]]
             }
         ]
     },

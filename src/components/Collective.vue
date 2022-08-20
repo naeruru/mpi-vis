@@ -53,6 +53,9 @@ export default {
             },
             yaxis: {
                 title: { text: 'Total data size', style: { fontSize: '14px'}  }
+            },
+            stroke: {
+                curve: 'straight'
             }
         }
     }),
