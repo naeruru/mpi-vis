@@ -9,10 +9,8 @@
 
         <v-app-bar-title>{{ title }}</v-app-bar-title>
 
-        <v-btn text @click="$router.push({ name: 'home' })">Home</v-btn>
-
         <template v-slot:append>
-          <v-btn icon="mdi-dots-vertical"></v-btn>
+          <v-btn text @click="$router.push({ name: 'home' })">Home</v-btn>
         </template>
       </v-app-bar>
 </template>

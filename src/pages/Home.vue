@@ -1,14 +1,14 @@
 <template>
     <v-container>
         <v-row>
-            <v-col :sm="12" :md="2" :xl="2">
+            <v-col :xs="12" :sm="12" :md="2" :lg="2" :xl="2">
                 <v-card rounded="lg">
                     <v-list>
                         <v-list-subheader>COLLECTIVES</v-list-subheader>
                         <v-list-item v-for="(collective, i) in collectives" :key="i" :value="collective"
                             active-color="primary" rounded="xl"
-                            @click="$router.push({ path: `/c/${collective.redirect}` })">
-                            <v-list-item-title v-text="collective.title"></v-list-item-title>
+                            @click="$router.push({ path: `/c/${collective.id}` })">
+                            <v-list-item-title v-text="collective.name"></v-list-item-title>
                         </v-list-item>
                     </v-list>
                 </v-card>
@@ -64,15 +64,12 @@
 </template>
 
 <script>
+
+import collectives from "../data/collectives.json";
+
 export default {
     data: () => ({
-        collectives: [
-            // { type: 'subheader', title: 'Collectives' },
-            { title: 'All to all', id: 1, redirect: 'alltoall' },
-            { title: 'All reduce', id: 2, redirect: 'allreduce' },
-            { title: 'All gather', id: 3, redirect: 'allgather' },
-            { title: '...', id: 4, },
-        ],
+        collectives: collectives,
         publications: [
             {
                 title: 'publication 1',

@@ -17,16 +17,13 @@
             {
                 "id": "spreadout",
                 "name": "Spread Out",
-                "data": [[2, 2], [4, 4], [8, 8], [16, 16], [32, 32]]
+                "data": [[2, 1], [4, 3], [8, 7], [16, 15], [32, 31]],
+                "receive_buffer": true,
+                "info": {
+                    "commstep": "In each communication step k, process p sends to <code>(rank + k) % P</code>, where P is the total number of processes. The algorithm takes <code>P - 1</code> communication steps.",
+                    "final": "Algorithm has finished."
+                }
             }
         ]
-    },
-    "allreduce": {
-        "id": "allreduce",
-        "name": "All Reduce"
-    },
-    "allgather": {
-        "id": "allgather",
-        "name": "All Gather"
     }
 }
