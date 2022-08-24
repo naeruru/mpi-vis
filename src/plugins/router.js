@@ -35,6 +35,6 @@ const routes = [
 ]
 
 export default new createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_APP_BASE_PATH),
   routes,
 })

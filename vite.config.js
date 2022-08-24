@@ -6,7 +6,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: "/mpi-vis/",
+	base: process.env.NODE_ENV === 'production' ? '/mpi-vis/' : './',
 	plugins: [
 			vue(),
 			vuetify({ autoImport: true }),
