@@ -49,10 +49,10 @@ export default {
                 fontSize: '18px'
             },
             xaxis: {
-                title: { text: 'Communicator size', style: { fontSize: '14px'} }
+                title: { text: 'Total data size', style: { fontSize: '14px'} }
             },
             yaxis: {
-                title: { text: 'Total data size', style: { fontSize: '14px'}  }
+                title: { text: 'Communication steps', style: { fontSize: '14px'}  }
             },
             stroke: {
                 curve: 'straight'

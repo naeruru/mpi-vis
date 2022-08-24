@@ -32,7 +32,7 @@
           <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
           <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-center" height="92%">
             <v-col v-for="p in processes" width="100%">
-              <h3 class="text-center pb-2">P{{ p.id }}</h3>
+              <h4 class="text-center pb-2">P{{ p.id }}</h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
                 <v-chip class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]" text-color="white">
                   <b v-if="block.status >= 1" class="red--text text--lighten-5">{{ block.id }}</b>
@@ -43,7 +43,6 @@
           </v-sheet>
         </v-card>
       </v-col>
-
 
       <v-col v-if="algorithm.receive_buffer" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
         <v-card class="pa-2" variant="outlined" height="100%" min-width="20vw">
@@ -58,7 +57,7 @@
           <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
           <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center" height="92%">
             <v-col v-for="p in processes" width="100%">
-              <h3 class="text-center pb-2">P{{ p.id }}</h3>
+              <h4 class="text-center pb-2">P{{ p.id }}</h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
                 <v-chip v-if="block" class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]" text-color="white">
                   <b v-if="block.status >= 1" class="red--text text--lighten-5">{{ block.id }}</b>
@@ -114,15 +113,33 @@
       </v-col>
     </v-sheet>
     <v-footer app class="d-flex flex-column">
-      <div class="d-flex w-100 align-center">
-        <h3 class="text-white mr-4">{{ step.text }}</h3>
+      <div class="pb-3 text-center w-100 d-md-none">
+          <v-menu
+          :close-on-content-click="false"
+          location="top"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn block variant="outlined" v-bind="props">
+              {{ step.text }}
+            </v-btn>
+          </template>
 
+          <v-card max-width="500">
+            <v-card-title>{{ step.text }}</v-card-title>
+            <v-card-text v-html="step.subtext"></v-card-text>
+          </v-card>
+
+        </v-menu>
+      </div>
+      <div class="d-flex w-100 align-center">
+        <h3 class="text-white mr-4 d-none d-md-flex">{{ step.text }}</h3>
         <v-menu
           :close-on-content-click="false"
           location="top"
         >
           <template v-slot:activator="{ props }">
             <v-btn
+              class="d-none d-md-flex"
               icon
               size="x-small"
               variant="outlined"
@@ -141,18 +158,20 @@
 
         <v-spacer></v-spacer> 
 
-        <v-btn :disabled="running || done || !valid_options" :loading="running" class="mx-2" color="info" @click="play">
-          play
-        </v-btn>
-        <v-btn :disabled="done || !valid_options" class="mx-2" color="success" @click="runStep">
-          step
-        </v-btn>
-        <v-btn :disabled="!running || !started" class="mx-2" color="error" @click="stop">
-          stop
-        </v-btn>
-        <v-btn :disabled="!started" class="mx-2" color="error" @click="reset">
-          reset
-        </v-btn>
+        <div class="d-flex justify-center align-baseline">
+          <v-btn :disabled="running || done || !valid_options" :loading="running" class="mr-3" color="info" @click="play">
+            play
+          </v-btn>
+          <v-btn :disabled="done || !valid_options" class="mr-3" color="success" @click="runStep">
+            step
+          </v-btn>
+          <v-btn :disabled="!running || !started" class="mr-3" color="error" @click="stop">
+            stop
+          </v-btn>
+          <v-btn :disabled="!started" color="error" @click="reset">
+            reset
+          </v-btn>
+        </div>
       </div>
     </v-footer>
   </v-sheet>
@@ -335,6 +354,17 @@ export default {
     this.reset()
     if (this.algorithm.scheme)
       this.scheme = this.algorithm.scheme[0]
+
+    switch(this.$vuetify.display.name) {
+      case 'sm':
+        this.num_processes = 12
+        break
+      case 'xs':
+        this.num_processes = 8
+        break
+      default:
+        break
+    }
   },
   mounted() {
     this.$refs.settingsForm.validate()
