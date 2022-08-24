@@ -35,6 +35,6 @@ const routes = [
 ]
 
 export default new createRouter({
-  history: createWebHistory(import.meta.env.VITE_APP_BASE_PATH),
+  history: createWebHistory(process.env.NODE_ENV === 'production' ? '/mpi-vis/' : './'),
   routes,
 })
