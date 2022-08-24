@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../pages/Home.vue'
+import Collective from '../components/Collective.vue'
 import Visualize from '../pages/Visualize.vue'
 import Header from '../components/Header.vue'
 
@@ -10,18 +11,27 @@ const routes = [
     path: '/',
     name: 'home',
     components: {
-        default: Home,
-        Header
-    }
+      default: Home,
+      Header
     },
-    {
-        path: '/visualize',
-        name: 'visualize',
+    children: [
+      {
+        path: 'c/:id',
+        name: 'collective',
         components: {
-            default: Visualize,
-            Header
+          Collective
         }
-    },
+      }
+    ]
+  },
+  {
+    path: '/vis/:collective/:algorithm',
+    name: 'visualize',
+    components: {
+      default: Visualize,
+      Header
+    }
+  },
 ]
 
 export default new createRouter({
