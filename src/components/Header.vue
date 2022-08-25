@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import collectives from "../data/collectives.json";
+import collectives from "../data/collectives.js";
+import page_details from "../data/main_page.js";
 
 export default {
   name: 'Header',
@@ -31,7 +32,7 @@ export default {
         const selectedAlgorithm = selectedCollective.algorithms[this.$route.params.algorithm]
         return `${selectedCollective.name} ー ${selectedAlgorithm.name}`
       } else {
-        return "MPI Visualizer"
+        return page_details.title
       }
     }
   },

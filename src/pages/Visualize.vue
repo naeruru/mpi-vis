@@ -1,15 +1,15 @@
 <template>
   <v-sheet color="transparent" class="pt-4" fluid height="100%">
     <v-form ref="settingsForm" v-model="valid_options" lazy-validation>
-      <v-sheet color="transparent" class="d-flex justify-center flex-wrap" height="100px">
-          <v-col v-if="algorithm.scheme" :xs="12" :md="4" :xl="2">
+      <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
+          <!-- <v-col v-if="algorithm.scheme" :xs="12" :sm="12" :md="4" :xl="2">
             <v-select v-model="scheme" :items="algorithm.scheme" label="Scheme" variant="outlined" :disabled="true"></v-select>
-          </v-col>
-          <v-col :xs="12" :md="4" :xl="2">
+          </v-col> -->
+          <v-col :xs="6" :sm="6" :md="4" :xl="2">
             <v-text-field v-model="num_processes" :disabled="started" label="Number of Processes" type="number" variant="outlined" :rules="num_processes_rules" required>
             </v-text-field>
           </v-col>
-          <v-col :xs="12" :md="4" :xl="2">
+          <v-col :xs="6" :sm="6" :md="4" :xl="2">
             <v-text-field v-model="block_size" :disabled="started" type="number" label="Elements per data-block" variant="outlined" :rules="block_size_rules" required>
             </v-text-field>
           </v-col>
@@ -19,7 +19,7 @@
     <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
       
       <v-col :cols="(dataViewMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-2" variant="outlined" min-height="100%" min-width="20vw">
+        <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn icon="mdi-minus" variant="text" size="x-small" @click="dataViewMinimized = true"></v-btn>
@@ -30,13 +30,15 @@
             <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
           <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
-          <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-center" height="92%">
+          <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
             <v-col v-for="p in processes" width="100%">
-              <h4 class="text-center pb-2">P{{ p.id }}</h4>
+              <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
-                <v-chip class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]" text-color="white">
-                  <b v-if="block.status >= 1" class="red--text text--lighten-5">{{ block.id }}</b>
-                  <p v-else>{{ block.id }}</p>
+                <v-chip class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
+                  <v-avatar flat tile center size="15">
+                    {{ block.id }}
+                  </v-avatar>
+                  <!-- <strong>{{ block.id }}</strong> -->
                 </v-chip>
               </v-row>
             </v-col>
@@ -45,23 +47,24 @@
       </v-col>
 
       <v-col v-if="algorithm.receive_buffer" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-2" variant="outlined" height="100%" min-width="20vw">
+        <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
-            <v-btn icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="adjMatrixMinimized = false"></v-btn>
+            <v-btn icon="mdi-minus" variant="text" size="x-small" @click="dataViewMinimized = true"></v-btn>
+            <v-btn icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="dataViewMinimized = false"></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
-            <h2 class="text-center">Receive Buffer</h2>
+            <h2 v-if="algorithm.receive_buffer" class="text-center">Send Buffer</h2>
+            <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
-          <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center" height="92%">
+          <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
+          <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
             <v-col v-for="p in processes" width="100%">
-              <h4 class="text-center pb-2">P{{ p.id }}</h4>
+              <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
-                <v-chip v-if="block" class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]" text-color="white">
-                  <b v-if="block.status >= 1" class="red--text text--lighten-5">{{ block.id }}</b>
-                  <p v-else>{{ block.id }}</p>
+                <v-chip v-if="block" class="mb-1" :label="block.status >= 1" size="small" :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
+                  <v-avatar tile flat center size="15">{{ block.id }}</v-avatar>
+                  <!-- <strong>{{ block.id }}</strong> -->
                 </v-chip>
                 <v-chip v-else class="mb-1" size="small" label>--</v-chip>
               </v-row>
@@ -71,7 +74,7 @@
       </v-col>
 
       <v-col v-else :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-2" variant="outlined" height="100%" min-width="20vw">
+        <v-card class="pa-1" variant="outlined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
@@ -88,7 +91,7 @@
                     
                   </th>
                   <th v-for="p in processes">
-                    P{{ p.id }}
+                    P{{ (p.id < 10) ? `0${p.id}` : p.id }}
                   </th>
                 </tr>
               </thead>
@@ -97,7 +100,7 @@
                   v-for="p in processes"
                   :key="p.id"
                 >
-                  <td>P{{ p.id }}</td>
+                  <td>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</td>
                   <td v-for="status in p.statuses">
                     <v-chip :color="getStatusColor(status.status)" size="x-small" :label="!status.status" variant="outlined">{{ (status.status === 0) ? 0 : 1 }}</v-chip>
                   </td>
@@ -132,7 +135,7 @@
         </v-menu>
       </div>
       <div class="d-flex w-100 align-center">
-        <h3 class="text-white mr-4 d-none d-md-flex">{{ step.text }}</h3>
+        <h3 class="mr-4 d-none d-md-flex">{{ step.text }}</h3>
         <v-menu
           :close-on-content-click="false"
           location="top"
@@ -179,7 +182,7 @@
 
 <script>
 
-import collectives from "../data/collectives.json";
+import collectives from "../data/collectives.js";
 import algorithms from "../helpers/algorithms.js"
 
 export default {
@@ -211,11 +214,6 @@ export default {
     dataViewMinimized: false,
     adjMatrixMinimized: false,
 
-    colors: ['blue', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white', 
-            '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA', 
-            '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
-            '#beb0f8', '#f1dcb0'],
-
     num_processes_rules: [
       v => !!v || "This field is required",
       v => ( v <= 32 ) || `Must be 32 or lower`,
@@ -233,6 +231,19 @@ export default {
       const algorithm = this.$route.params.algorithm
       return collectives[collective].algorithms[algorithm]
     },
+    colors() {
+      if (this.$vuetify.theme.name === 'dark') {
+        return ['blue', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white', 
+            '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA', 
+            '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
+            '#beb0f8', '#f1dcb0']
+      } else {
+        return ['blue', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white', 
+            '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA', 
+            '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
+            '#beb0f8', '#f1dcb0']
+      }
+    }
   },
   watch: {
     num_processes(oldNum, newNum) {
@@ -285,7 +296,7 @@ export default {
         id: 0,
         substep: 0,
         text: "Initial Data",
-        subtext: "Initial Data setup"
+        subtext: this.algorithm.info.initial
       }
     this.processes = this.generateDataSet()
     },
@@ -351,7 +362,6 @@ export default {
     }
   },
   beforeMount() {
-    this.reset()
     if (this.algorithm.scheme)
       this.scheme = this.algorithm.scheme[0]
 
@@ -365,6 +375,8 @@ export default {
       default:
         break
     }
+
+    this.reset()
   },
   mounted() {
     this.$refs.settingsForm.validate()

@@ -1,4 +1,4 @@
-import collectives from "../../data/collectives.json";
+import collectives from "../../data/collectives.js";
 
 export default {
     // bruck uniform
@@ -258,8 +258,8 @@ export default {
             // resolve(data)
         })
     },
-    // spread out OLD
-    '2': function(data, k, step, num_processes, block_size) {
+    // spread out OLD (in place)
+    '-1': function(data, k, step, num_processes, block_size) {
         return new Promise((resolve, reject) => {
 
             const toReturn = {
