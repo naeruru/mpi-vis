@@ -205,11 +205,13 @@ export default {
                         
                     } else {
                         // move marked
-                        data.map(p => {
+                        data.map((p, i) => {
                             const markedBlocks = p.blocks.filter(block => block.status === 1)
 
-                            markedBlocks.forEach((block, i) => {
-                                p.receive_buffer[(block.color * block_size) + i] = JSON.parse(JSON.stringify(block))
+                            markedBlocks.forEach((block, j) => {
+                                const moveToBlock = ((block.id * block_size) + j) % (data.length * block_size)
+                                const moveToProcess = (i + k + 1)  % (data.length)
+                                data[moveToProcess].receive_buffer[moveToBlock] = JSON.parse(JSON.stringify(block))
                                 block.status = 2
                             })
 
