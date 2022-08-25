@@ -50,15 +50,15 @@
         <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn icon="mdi-minus" variant="text" size="x-small" @click="dataViewMinimized = true"></v-btn>
-            <v-btn icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="dataViewMinimized = false"></v-btn>
+            <v-btn icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
+            <v-btn icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="adjMatrixMinimized = false"></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
-            <h2 v-if="algorithm.receive_buffer" class="text-center">Send Buffer</h2>
+            <h2 v-if="algorithm.receive_buffer" class="text-center">Receive Buffer</h2>
             <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
-          <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
-          <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
+          <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
+          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
             <v-col v-for="p in processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
@@ -84,7 +84,7 @@
             <h2 class="text-center">Adjacency Matrix</h2>
           </v-sheet>
           <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-            <v-table v-if="!adjMatrixMinimized">
+            <v-table v-if="!adjMatrixMinimized" density="comfortable">
               <thead>
                 <tr>
                   <th class="text-left">

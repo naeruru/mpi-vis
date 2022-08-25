@@ -33,10 +33,11 @@ export default {
                 // whether or not the algorithm has multiple schemes
                 "scheme": ["Uniform", "Nonuniform"],
                 // step info menu text (html syntax)
+                // you can append customized info to these in the algorithm steps (./helpers/collectives/)
                 "info": {
                     // 'initial' is required
                     "initial": `
-                        Initial data seteup.
+                        Data is initialized.
                     `,
                     "rotationphase": `
                         <code>S[i] = S[i+p] (p: rank)</code>
@@ -58,7 +59,7 @@ export default {
                 "receive_buffer": true,
                 "info": {
                     "initial": `
-                        Initial data seteup.
+                        Data is initialized.
                     `,
                     "commstep": `
                         In each communication step k, process p sends to <code>(rank + k) % P</code>, where P is the total number of processes. 
