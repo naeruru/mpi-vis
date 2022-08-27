@@ -5,10 +5,8 @@
                 <h2>{{ collectives[$route.params.id].name }}</h2>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>
-                {{ collectives[$route.params.id].body }}
-            </v-card-text>
-            <v-card-title>Click on an algorithm to get started</v-card-title>
+            <v-card-text class="text-subtitle-1"  v-html="collectives[$route.params.id].body"></v-card-text>
+            <v-card-title>Click on an algorithm below to get started</v-card-title>
             <v-divider class="mb-4"></v-divider>
             <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart>
         </v-card>

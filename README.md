@@ -1,7 +1,19 @@
-# Vue 3 + Vite
+# A Visual Guide to MPI All-to-all
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+The standard implementation of `MPI_Alltoall` in MPI libraries (e.g., MPICH, Open-MPI) uses a combination of techniques, such as the spread-out and Bruck algorithms. 
+The spread-out algorithm uses a linear number iterations, in process count $P$, while the Bruck algorithm is logarithmic.
+The Bruck algorithm transfers more data overall, but with fewer communication steps, and is thus better suited for smaller sized (latency-dominated) messages. MPI implementations dynamically choose the underlying algorithm to use depending upon process count and message size. 
 
-## Recommended IDE Setup
+We have created an easy-to-use, parameterized, interactive web-based visualization that shows the implementation details of both the linear-step spread-out algorithm and the log-step Bruck algorithm, along with the decision tree used to choose between these two algorithms. Our tool visually illustrates and animates the two algorithms, pointing out key differences such as number of iterations, communication pattern and whether they are in-place.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+## Getting Started
+### Requirements
+- NodeJS 18.4.0
+
+### Running the Project
+Use `npm install` to download dependencies. Then, run the application with `npm run dev`. The website preview will be served at http://localhost:3000/.
+
+
+### Building the Project
+Build the project with `npm run build`. Files will be compiled to `dist/`.

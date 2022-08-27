@@ -129,7 +129,8 @@
 
           <v-card max-width="500">
             <v-card-title>{{ step.text }}</v-card-title>
-            <v-card-text v-html="step.subtext"></v-card-text>
+            <v-divider class="mx-4"></v-divider>
+            <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
           </v-card>
 
         </v-menu>
@@ -154,7 +155,8 @@
 
           <v-card max-width="500">
             <v-card-title>{{ step.text }}</v-card-title>
-            <v-card-text v-html="step.subtext"></v-card-text>
+            <v-divider class="mx-4"></v-divider>
+            <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
           </v-card>
 
         </v-menu>
@@ -295,7 +297,7 @@ export default {
       this.step = {
         id: 0,
         substep: 0,
-        text: "Initial Data",
+        text: "Initial State",
         subtext: this.algorithm.info.initial
       }
     this.processes = this.generateDataSet()

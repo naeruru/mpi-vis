@@ -26,12 +26,10 @@
             <v-col v-else>
                 <v-card class="mb-6" rounded="lg">
                     <v-card-title>{{ page_details.title }}</v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-text>
-                        {{ page_details.body }}
-                    </v-card-text>
+                    <v-divider class="mx-4"></v-divider>
+                    <v-card-text class="text-subtitle-1" v-html="page_details.body" ></v-card-text>
                 </v-card>
-                <v-card>
+                <v-card rounded="lg">
                     <v-card-title>Related Publications</v-card-title>
                     <v-divider></v-divider>
                     <v-table>
@@ -41,13 +39,13 @@
                                     Title
                                 </th>
                                 <th class="text-left">
-                                    Author
+                                    Author(s)
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in page_details.publications" :key="item.name" class="clickable" v-on:click="openLink(item.link)">
-                                <td>{{ item.title }}</td>
+                                <td><strong>{{ item.title }}</strong></td>
                                 <td>{{ item.author }}</td>
                             </tr>
                         </tbody>

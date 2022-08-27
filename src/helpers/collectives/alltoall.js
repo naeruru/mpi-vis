@@ -53,6 +53,13 @@ export default {
                             return p
                         })
                     }
+
+
+                    let bitstring = new Array(Math.ceil(Math.log2(num_processes))).join("0")
+                    bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
+                    const commStepInfo = `
+                        <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
+                    `
                     
                     if (step.substep === 0) {
                         // MARK ONLY
@@ -81,7 +88,7 @@ export default {
                             id: 1,
                             substep: 1,
                             text: `Communication Step k = ${k}`,
-                            subtext: collectives.alltoall.algorithms[0].info.commstep
+                            subtext: collectives.alltoall.algorithms[0].info.commstep + commStepInfo
                         }
                     } else {
                         // MOVE MARKED
@@ -116,7 +123,7 @@ export default {
                             id: 1,
                             substep: 2, // curr k is done
                             text: `Communication Step k = ${k}`,
-                            subtext: collectives.alltoall.algorithms[0].info.commstep
+                            subtext: collectives.alltoall.algorithms[0].info.commstep + commStepInfo
                         }
                     }
 
@@ -182,6 +189,10 @@ export default {
                         step.substep = 0
                     }
 
+                    const commStepInfo = `
+                        <br><br> For <strong><code>k = ${k}</code></strong>, process <code>p</code> sends to <code>(rank + ${k}) % ${num_processes}</code>.
+                    `
+
                     if (step.substep === 0) {
 
                         // mark only
@@ -200,7 +211,7 @@ export default {
                             id: 0,
                             substep: 1,
                             text: `Communication Step k = ${k}`,
-                            subtext: collectives.alltoall.algorithms[1].info.commstep
+                            subtext: collectives.alltoall.algorithms[1].info.commstep + commStepInfo
                         }
                         
                     } else {
@@ -223,7 +234,7 @@ export default {
                             id: 0,
                             substep: 2,
                             text: `Communication Step k = ${k}`,
-                            subtext: collectives.alltoall.algorithms[1].info.commstep
+                            subtext: collectives.alltoall.algorithms[1].info.commstep + commStepInfo
                         }
                     }
 
