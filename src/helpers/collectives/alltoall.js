@@ -2,12 +2,13 @@ import collectives from "../../data/collectives.js";
 
 export default {
     // bruck uniform
-    '0': function(data, k, step, num_processes, block_size) {
+    '0': function(data, k, step, num_processes, block_size, data_moved) {
         return new Promise((resolve, reject) => {
 
             const toReturn = {
                 done: false,
                 k: k,
+                data_moved: data_moved,
                 step: null
             }
 
@@ -114,6 +115,8 @@ export default {
                                 next[index].status = 2
                             })
 
+                            toReturn.data_moved += current.length / block_size
+
                             //adj matrix update
                             data[sendTo].statuses[i].status = 2
 
@@ -156,12 +159,13 @@ export default {
         })
     },
     // spread out
-    '1': function(data, k, step, num_processes, block_size) {
+    '1': function(data, k, step, num_processes, block_size, data_moved) {
         return new Promise((resolve, reject) => {
 
             const toReturn = {
                 done: false,
                 k: k,
+                data_moved: data_moved,
                 step: null
             }
 
@@ -225,6 +229,8 @@ export default {
                                 data[moveToProcess].receive_buffer[moveToBlock] = JSON.parse(JSON.stringify(block))
                                 block.status = 2
                             })
+
+                            toReturn.data_moved += markedBlocks.length / block_size
 
                             return p
                         })

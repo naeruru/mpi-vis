@@ -128,7 +128,10 @@
           </template>
 
           <v-card max-width="500">
-            <v-card-title>{{ step.text }}</v-card-title>
+            <v-card-item>
+              <v-card-title>{{ step.text }}</v-card-title>
+              <v-card-subtitle>{{ data_moved }} total blocks moved</v-card-subtitle>
+            </v-card-item>
             <v-divider class="mx-4"></v-divider>
             <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
           </v-card>
@@ -154,7 +157,10 @@
           </template>
 
           <v-card max-width="500">
-            <v-card-title>{{ step.text }}</v-card-title>
+            <v-card-item>
+              <v-card-title>{{ step.text }}</v-card-title>
+              <v-card-subtitle>{{ data_moved }} total blocks moved</v-card-subtitle>
+            </v-card-item>
             <v-divider class="mx-4"></v-divider>
             <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
           </v-card>
@@ -203,6 +209,7 @@ export default {
 
     k: 0, 
     step: null,
+    data_moved: 0,
 
     processes: null,
 
@@ -293,6 +300,7 @@ export default {
       this.running = false
       this.done = false
       this.k = 0
+      this.data_moved = 0
       clearInterval(this.timer)
       this.step = {
         id: 0,
@@ -306,9 +314,10 @@ export default {
       this.started = true
       const collective = this.$route.params.collective
       const algorithm = this.$route.params.algorithm
-      await algorithms[collective][algorithm](this.processes, this.k, this.step, this.num_processes, this.block_size).then(data => {
+      await algorithms[collective][algorithm](this.processes, this.k, this.step, this.num_processes, this.block_size, this.data_moved).then(data => {
         this.k = data.k
         this.step = data.step
+        this.data_moved = data.data_moved
         if (data.done) {
           this.stop()
         }
