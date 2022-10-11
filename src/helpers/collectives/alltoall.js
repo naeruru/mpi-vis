@@ -9,6 +9,7 @@ export default {
                 done: false,
                 k: k,
                 data_moved: data_moved,
+                data_pending: 0,
                 step: null
             }
 
@@ -80,10 +81,13 @@ export default {
                                 const blockbid = ('000000000' + Number(blockid).toString(2)).slice(-10)
                                 if (blockbid[blockbid.length - (k + 1)] === '1') {
                                     p.blocks[i].status = 1
+                                    toReturn.data_pending += 1
                                 }
                             }
                             return p
                         })
+
+                        toReturn.data_pending /= block_size
 
                         toReturn.step = {
                             id: 1,
@@ -166,6 +170,7 @@ export default {
                 done: false,
                 k: k,
                 data_moved: data_moved,
+                data_pending: 0,
                 step: null
             }
 

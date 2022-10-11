@@ -130,7 +130,10 @@
           <v-card max-width="500">
             <v-card-item>
               <v-card-title>{{ step.text }}</v-card-title>
-              <v-card-subtitle>{{ data_moved }} total blocks moved</v-card-subtitle>
+              <v-card-subtitle>
+                <p v-if="data_pending === 0">{{ data_moved }} total blocks moved</p>
+                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} pending)</p>
+              </v-card-subtitle>
             </v-card-item>
             <v-divider class="mx-4"></v-divider>
             <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
@@ -159,7 +162,10 @@
           <v-card max-width="500">
             <v-card-item>
               <v-card-title>{{ step.text }}</v-card-title>
-              <v-card-subtitle>{{ data_moved }} total blocks moved</v-card-subtitle>
+              <v-card-subtitle>
+                <p v-if="data_pending === 0">{{ data_moved }} total blocks moved</p>
+                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} blocks pending)</p>
+              </v-card-subtitle>
             </v-card-item>
             <v-divider class="mx-4"></v-divider>
             <v-card-text class="text-subtitle-1" v-html="step.subtext"></v-card-text>
@@ -209,7 +215,9 @@ export default {
 
     k: 0, 
     step: null,
+
     data_moved: 0,
+    data_pending: 0,
 
     processes: null,
 
@@ -318,6 +326,7 @@ export default {
         this.k = data.k
         this.step = data.step
         this.data_moved = data.data_moved
+        this.data_pending = data.data_pending
         if (data.done) {
           this.stop()
         }
