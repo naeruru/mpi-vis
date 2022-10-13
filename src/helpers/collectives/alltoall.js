@@ -120,6 +120,7 @@ export default {
                             })
 
                             toReturn.data_moved += current.length / block_size
+                            toReturn.data_pending += current.length / block_size
 
                             //adj matrix update
                             data[sendTo].statuses[i].status = 2
@@ -211,10 +212,15 @@ export default {
                             const blocksToMark = p.blocks.filter((element) => {
                                 return element.color === p.blocks.at(index).color
                             })
-                            blocksToMark.map(block => block.status = 1)
+                            blocksToMark.map(block => {
+                                block.status = 1
+                                toReturn.data_pending += 1
+                            })
                             p.statuses.at((p.id + k) % data.length - data.length + 1).status = 1
                             return p
                         })
+
+                        toReturn.data_pending /= block_size
 
                         toReturn.step = {
                             id: 0,
@@ -236,6 +242,7 @@ export default {
                             })
 
                             toReturn.data_moved += markedBlocks.length / block_size
+                            toReturn.data_pending += markedBlocks.length / block_size
 
                             return p
                         })

@@ -1,5 +1,6 @@
 <template>
   <v-sheet color="transparent" class="pt-4" fluid height="100%">
+
     <v-form ref="settingsForm" v-model="valid_options" lazy-validation>
       <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
           <!-- <v-col v-if="algorithm.scheme" :xs="12" :sm="12" :md="4" :xl="2">
@@ -132,7 +133,7 @@
               <v-card-title>{{ step.text }}</v-card-title>
               <v-card-subtitle>
                 <p v-if="data_pending === 0">{{ data_moved }} total blocks moved</p>
-                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} pending)</p>
+                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} sending)</p>
               </v-card-subtitle>
             </v-card-item>
             <v-divider class="mx-4"></v-divider>
@@ -142,7 +143,6 @@
         </v-menu>
       </div>
       <div class="d-flex w-100 align-center">
-        <h3 class="mr-4 d-none d-md-flex">{{ step.text }}</h3>
         <v-menu
           :close-on-content-click="false"
           location="top"
@@ -164,7 +164,7 @@
               <v-card-title>{{ step.text }}</v-card-title>
               <v-card-subtitle>
                 <p v-if="data_pending === 0">{{ data_moved }} total blocks moved</p>
-                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} blocks pending)</p>
+                <p v-else>{{ data_moved }} total blocks moved ({{ data_pending }} blocks sending)</p>
               </v-card-subtitle>
             </v-card-item>
             <v-divider class="mx-4"></v-divider>
@@ -172,6 +172,21 @@
           </v-card>
 
         </v-menu>
+
+        <h3 class="mx-2 d-none d-md-flex">{{ step.text }}</h3>
+
+        <v-chip class="mr-1 d-none d-md-flex" color="primary">{{ data_moved }} total blocks transfered</v-chip>
+        <v-chip class="d-none d-md-flex">
+          <v-progress-circular
+            v-if="step.substep === 1"
+            class="mr-1"
+            indeterminate
+            :size="21"
+            :width="1"
+          ></v-progress-circular>
+          <v-icon v-if="step.substep === 2" class="mr-1">mdi-check</v-icon>
+          {{ data_pending }} blocks transferring this step
+        </v-chip>
 
         <v-spacer></v-spacer> 
 
@@ -309,6 +324,7 @@ export default {
       this.done = false
       this.k = 0
       this.data_moved = 0
+      this.data_pending = 0
       clearInterval(this.timer)
       this.step = {
         id: 0,
