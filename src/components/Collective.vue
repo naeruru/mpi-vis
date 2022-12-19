@@ -6,7 +6,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text class="text-subtitle-1"  v-html="collectives[$route.params.id].body"></v-card-text>
-            <v-card-title>Click on an algorithm below to get started</v-card-title>
+            <v-card-title class="text-wrap">Click on an algorithm below to get started</v-card-title>
             <v-divider class="mb-4"></v-divider>
             <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart>
         </v-card>
@@ -39,7 +39,7 @@ export default {
                 fontSize: '18px'
             },
             xaxis: {
-                title: { text: 'Total data size', style: { fontSize: '14px'} }
+                title: { text: 'Total process count', style: { fontSize: '14px'} }
             },
             yaxis: {
                 title: { text: 'Communication steps', style: { fontSize: '14px'}  }
