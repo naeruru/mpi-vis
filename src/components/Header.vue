@@ -10,7 +10,7 @@
         <v-app-bar-title>{{ title }}</v-app-bar-title>
 
         <template v-slot:append>
-          <v-btn text @click="$router.push({ name: 'home' })">Home</v-btn>
+          <v-btn icon @click="$router.push({ name: 'home' })"><v-icon>mdi-home</v-icon></v-btn>
         </template>
       </v-app-bar>
 </template>
