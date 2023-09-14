@@ -37,6 +37,11 @@ export default {
             title: 'Implementing a classic: Zero-copy all-to-all communication with mpi datatypes',
             author: 'J. L. Tr ̈aff, A. Rougier, and S. Hunold',
             link: 'https://dl.acm.org/doi/abs/10.1145/2597652.2597662'
+        },
+        {
+            title: 'SLOAVx: Scalable LOgarithmic AlltoallV Algorithm for Hierarchical Multicore Systems',
+            author: 'C. Xu, M. G. Venkata, R. L. Graham, Y. Wang, Z. Liu, and W. Yu',
+            link: 'https://ieeexplore.ieee.org/document/6546114'
         }
     ]
 }
