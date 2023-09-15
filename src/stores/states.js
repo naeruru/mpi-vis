@@ -27,6 +27,7 @@ export const useStatesStore = defineStore('states', {
 
     num_processes: 16,
     block_size: 1,
+    radix: 2,
   }),
   getters: {
     algorithm() {
@@ -66,7 +67,8 @@ export const useStatesStore = defineStore('states', {
       this.started = true
       const collective = this.router.currentRoute.params.collective
       const algorithm = this.router.currentRoute.params.algorithm
-      await algorithms[collective][algorithm](this.processes, this.k, this.step, this.num_processes, this.block_size, this.data_moved, undo).then(data => {
+      const options = { num_processes: this.num_processes, block_size: this.block_size, radix: this.radix }
+      await algorithms[collective][algorithm](this.processes, this.k, this.step, options, this.data_moved, undo).then(data => {
         if (!data) return
         this.k = data.k
         this.step = data.step

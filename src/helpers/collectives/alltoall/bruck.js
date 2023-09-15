@@ -1,7 +1,8 @@
 import collectives from "../../../data/collectives.js"
 
-export function bruck(data, k, step, num_processes, block_size, data_moved, undo=false) {
+export function bruck(data, k, step, options, data_moved, undo=false) {
     return new Promise((resolve, reject) => {
+        options.radix = 3
 
         const toReturn = {
             done: false,
@@ -12,14 +13,15 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
         }
 
         // final comm step k was reached and completed
-        if (step.substep === 2 && k === Math.ceil(Math.log2(num_processes)) - 1) {
+        console.log(Math.log2(options.num_processes) - 1)
+        if (step.substep === 2 && k === Math.ceil(Math.log2(options.num_processes)) - 1) {
             step.id = 2
         }
 
         switch(step.id) {
             case 0: // rotation phase
                 data.map((p) => {
-                    for (let i = 0; i < p.id * block_size; i++) {
+                    for (let i = 0; i < p.id * options.block_size; i++) {
                         p.blocks.push(p.blocks.shift())
                     }
                     return p
@@ -55,7 +57,7 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
                 }
 
 
-                let bitstring = new Array(Math.ceil(Math.log2(num_processes))).join("0")
+                let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
                 bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
                 const commStepInfo = `
                     <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
@@ -75,9 +77,12 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
                         for (let i = 0; i < p.blocks.length; i++) {
                             //let blockid = p.id.toString() + p.blocks[i].color.toString()
                             // get binary for kth bit
-                            const blockid = Math.floor(i / block_size)
-                            const blockbid = ('000000000' + Number(blockid).toString(2)).slice(-10)
-                            if (blockbid[blockbid.length - (k + 1)] === '1') {
+                            const blockid = Math.floor(i / options.block_size)
+                            const blockbid = ('000000000' + Number(blockid).toString(options.radix)).slice(-10)
+                            const kb = ('000000000' + Number(k + 1).toString(options.radix)).slice(-10)
+                            // check if bit index is equal to the iterating (1 ≤ 𝑧 < 𝑟)
+                            // z = (k % (options.radix - 1)) + 1
+                            if (blockbid[blockbid.length - Math.ceil((k + 1) / (options.radix - 1))] == (k % (options.radix - 1)) + 1) {
                                 p.blocks[i].status = 1
                                 toReturn.data_pending += 1
                             }
@@ -85,7 +90,7 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
                         return p
                     })
 
-                    toReturn.data_pending /= block_size
+                    toReturn.data_pending /= options.block_size
 
                     toReturn.step = {
                         id: 1,
@@ -103,7 +108,10 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
                             return element.status === 1
                         })
 
-                        let sendTo = i + 2 ** k
+                        const z = (k % (options.radix - 1)) + 1
+                        const x = Math.ceil((k + 1) / (options.radix - 1))
+                        // console.log(`z = ${z}\nx = ${x}\nradix = ${options.radix}\neq = ${z * options.radix ** (x - 1)}`)
+                        let sendTo = i + z * options.radix ** (x - 1)
                         if (sendTo > data.length - 1) {
                             sendTo = sendTo - data.length
                         }
@@ -117,8 +125,8 @@ export function bruck(data, k, step, num_processes, block_size, data_moved, undo
                             next[index].status = 2
                         })
 
-                        toReturn.data_moved += current.length / block_size
-                        toReturn.data_pending += current.length / block_size
+                        toReturn.data_moved += current.length / options.block_size
+                        toReturn.data_pending += current.length / options.block_size
 
                         //adj matrix update
                         data[sendTo].statuses[i].status = 2

@@ -1,6 +1,6 @@
 import collectives from "../../../data/collectives.js"
 
-export function spreadout(data, k, step, num_processes, block_size, data_moved, undo=false) {
+export function spreadout(data, k, step, options, data_moved, undo=false) {
     return new Promise((resolve, reject) => {
 
         const state = {
@@ -25,9 +25,9 @@ export function spreadout(data, k, step, num_processes, block_size, data_moved, 
         }
 
         if (!undo) {
-            resolve(forward(data, k, step, num_processes, block_size, state))
+            resolve(forward(data, k, step, options.num_processes, options.block_size, state))
         } else {
-            resolve(backward(data, k, step, num_processes, block_size, state))
+            resolve(backward(data, k, step, options.num_processes, options.block_size, state))
         }
     })
 }
