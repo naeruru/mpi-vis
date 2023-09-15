@@ -2,7 +2,6 @@ import collectives from "../../../data/collectives.js"
 
 export function bruck(data, k, step, options, data_moved, undo=false) {
     return new Promise((resolve, reject) => {
-        options.radix = 3
 
         const toReturn = {
             done: false,
@@ -13,7 +12,7 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
         }
 
         // final comm step k was reached and completed
-        console.log(Math.log2(options.num_processes) - 1)
+        // console.log(Math.log2(options.num_processes) - 1)
         if (step.substep === 2 && k === Math.ceil(Math.log2(options.num_processes)) - 1) {
             step.id = 2
         }

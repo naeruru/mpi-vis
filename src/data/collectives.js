@@ -44,6 +44,13 @@ export default {
                 "id": "bruck",
                 // used for display name
                 "name": "Bruck",
+                // enabled options
+                options: {
+                    num_processes: true,
+                    block_size: true,
+                    radix: true,
+                    binary: true,
+                },
                 // graph data
                 "data": [[2, 1], [4, 2], [8, 3], [16, 4], [32, 5]],
                 // whether or not the algorithm has multiple schemes
@@ -85,6 +92,12 @@ export default {
             {
                 "id": "spreadout",
                 "name": "Spread Out",
+                options: {
+                    num_processes: true,
+                    block_size: true,
+                    radix: false,
+                    binary: false,
+                },
                 "data": [[2, 1], [4, 3], [8, 7], [16, 15], [32, 31]],
                 "receive_buffer": true,
                 "info": {

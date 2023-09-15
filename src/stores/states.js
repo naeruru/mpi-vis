@@ -74,7 +74,7 @@ export const useStatesStore = defineStore('states', {
         this.step = data.step
         this.data_moved = data.data_moved
         this.data_pending = data.data_pending
-        if (!this.data_moved && !this.data_pending) this.started = false // undo all the way
+        if (!this.data_moved && !this.data_pending && this.step.id === 0) this.started = false // undo all the way
         if (data.done) {
           this.stop()
         }

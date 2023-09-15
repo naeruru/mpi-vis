@@ -3,14 +3,19 @@
 
     <v-form ref="settingsForm" v-model="valid_options" lazy-validation>
       <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
-        <v-col :xs="6" :sm="6" :md="4" :xl="2">
+        <v-col :cols="6" :xs="12" :sm="6" :md="4" :xl="2" class="py-2">
           <v-text-field v-model="statesStore.num_processes" :disabled="statesStore.started" label="Number of Processes"
             type="number" variant="outlined" :rules="num_processes_rules" required density="compact">
           </v-text-field>
         </v-col>
-        <v-col :xs="6" :sm="6" :md="4" :xl="2">
+        <v-col :cols="6" :xs="12" :sm="6" :md="4" :xl="2" class="py-2">
           <v-text-field v-model="statesStore.block_size" :disabled="statesStore.started" type="number"
             label="Elements per data-block" variant="outlined" :rules="block_size_rules" required density="compact">
+          </v-text-field>
+        </v-col>
+        <v-col v-if="statesStore.algorithm.options.radix" :cols="12" :xs="12" :sm="12" :md="4" :xl="2" class="py-2">
+          <v-text-field v-model="statesStore.radix" :disabled="statesStore.started" type="number"
+            label="Radix r" variant="outlined" :rules="radix_rules" required density="compact">
           </v-text-field>
         </v-col>
       </v-sheet>
@@ -30,6 +35,14 @@
           </v-sheet>
           <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
           <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
+            <v-col v-if="statesStore.algorithm.options.binary" class="justify-right">
+              <h4 class="text-center pb-2"><code>B</code></h4>
+              <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
+                <v-chip v-if="statesStore.radix > 1" class="mb-1" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
+                  {{ ('00000' + i.toString(statesStore.radix)).slice(-Math.ceil(Math.log2(statesStore.num_processes))) }}
+                </v-chip>
+              </v-row>
+            </v-col>
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
@@ -120,6 +133,7 @@
 
 
     <v-navigation-drawer
+      v-if="!smAndDown"
       v-model="statesStore.drawer"
       :rail="statesStore.rail"
       permanent
@@ -248,34 +262,42 @@
 
 import { useStatesStore } from '../stores/states'
 
+import { useDisplay } from 'vuetify'
+
 import ControlFooter from "../components/Visualize/ControlFooter.vue"
 
 export default {
   name: 'Visualize',
 
   components: { ControlFooter },
-  data: () => ({
+  data() {
+    return {
+      valid_options: true,
 
-    valid_options: true,
+      scheme: null,
 
-    scheme: null,
+      dataViewMinimized: false,
+      adjMatrixMinimized: false,
 
-    dataViewMinimized: false,
-    adjMatrixMinimized: false,
+      outer_size: 200,
 
-    outer_size: 200,
-
-    num_processes_rules: [
-      v => !!v || "This field is required",
-      v => (v <= 32) || `Must be 32 or lower`,
-      v => (v >= 2) || `Must be greater than 1`
-    ],
-    block_size_rules: [
-      v => !!v || "This field is required",
-      v => (v <= 4) || `Must be 4 or lower`,
-      v => (v > 0) || `Must be greater than 0`
-    ]
-  }),
+      num_processes_rules: [
+        v => !!v || "This field is required",
+        v => (v <= 32) || `Must be 32 or lower`,
+        v => (v >= 2) || `Must be greater than 1`
+      ],
+      block_size_rules: [
+        v => !!v || "This field is required",
+        v => (v <= 4) || `Must be 4 or lower`,
+        v => (v > 0) || `Must be greater than 0`
+      ],
+      radix_rules: [
+        v => !!v || "This field is required",
+        v => (v < this.statesStore.num_processes) || `Must be less than process count`,
+        v => (v > 1) || `Must be greater than 1`
+      ]
+    }
+  },
   computed: {
     colors() {
       if (this.$vuetify.theme.name === 'dark') {
@@ -348,9 +370,11 @@ export default {
   },
   setup() {
     const statesStore = useStatesStore()
-
+    const { smAndDown } = useDisplay()
+    
     return {
-      statesStore
+      statesStore,
+      smAndDown,
     }
   }
 }
