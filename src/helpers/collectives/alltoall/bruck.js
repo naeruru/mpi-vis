@@ -33,15 +33,15 @@ function backward(data, k, step, options, state) {
     console.log(`k = ${k}`)
     console.log('----------------')
 
+    let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
+    bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
+    const commStepInfo = `
+        <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
+    `
     switch(step.id) {
         case 0:
             break
         case 1:
-            let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
-            bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
-            const commStepInfo = `
-                <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
-            `
             switch(step.substep) {
                 case 0:
                     // back to initial state
@@ -166,7 +166,7 @@ function backward(data, k, step, options, state) {
                             next[index].status = 1
                         })
     
-                        state.data_moved += current.length / options.block_size
+                        state.data_moved -= current.length / options.block_size
                         state.data_pending += current.length / options.block_size
     
                         //adj matrix update
@@ -179,11 +179,53 @@ function backward(data, k, step, options, state) {
                         text: `Communication Step k = ${k}`,
                         subtext: collectives.alltoall.algorithms[0].info.commstep + commStepInfo
                     }
-                    // return state
+                    
                     break
             }
             break
         case 2:
+            // same as 1:2
+            let current
+            let next
+            const data_copy = JSON.parse(JSON.stringify(data))
+            for (let i = 0; i < data.length; i++) {
+                current = data_copy[i].blocks.filter((element, index) => {
+                    return element.status === 2 // changed
+                })
+
+                const z = (k % (options.radix - 1)) + 1
+                const x = Math.ceil((k + 1) / (options.radix - 1))
+                let sendTo = i + z * options.radix ** (x - 1)
+                sendTo = i - (sendTo - i)
+                console.log(sendTo)
+                if (sendTo < 0) {
+                    sendTo = data.length + sendTo
+                }
+                
+                
+                next = data[sendTo].blocks.filter((element, index) => {
+                    return element.status === 2
+                })
+
+                current.forEach((object, index) => {
+                    next[index].id = object.id
+                    next[index].color = object.color
+                    next[index].status = 1
+                })
+
+                state.data_moved -= current.length / options.block_size
+                state.data_pending += current.length / options.block_size
+
+                //adj matrix update
+                data[sendTo].statuses[i].status = 2
+
+            }
+            state.step = {
+                id: 1,
+                substep: 1,
+                text: `Communication Step k = ${k}`,
+                subtext: collectives.alltoall.algorithms[0].info.commstep + commStepInfo
+            }
             break
     }
 
