@@ -38,7 +38,7 @@
             <v-col v-if="statesStore.algorithm.options.binary && (statesStore.num_processes && statesStore.radix)" class="justify-right">
               <h4 class="text-center pb-2"><code>B</code></h4>
               <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
-                <v-chip v-if="statesStore.radix > 1" class="mb-1" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
+                <v-chip v-if="statesStore.radix > 1" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
                   {{ ('00000' + i.toString(statesStore.radix)).slice(-Math.ceil(Math.log2(statesStore.num_processes))) }}
                 </v-chip>
               </v-row>
@@ -46,7 +46,7 @@
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
-                <v-chip class="mb-1" :label="block.status >= 1" size="small"
+                <v-chip :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
                   <v-avatar flat tile center size="15">
                     {{ block.id }}
@@ -75,12 +75,12 @@
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
-                <v-chip v-if="block" class="mb-1" :label="block.status >= 1" size="small"
+                <v-chip v-if="block" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
                   <v-avatar tile flat center size="15">{{ block.id }}</v-avatar>
                   <!-- <strong>{{ block.id }}</strong> -->
                 </v-chip>
-                <v-chip v-else class="mb-1" size="small" label>--</v-chip>
+                <v-chip v-else size="small" label>--</v-chip>
               </v-row>
             </v-col>
           </v-sheet>
@@ -99,21 +99,22 @@
             <h2 class="text-center">Adjacency Matrix</h2>
           </v-sheet>
           <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-          <v-table v-if="!adjMatrixMinimized" density="comfortable">
+          <v-table v-if="!adjMatrixMinimized" density="dense">
             <thead>
               <tr>
                 <th class="text-left">
 
                 </th>
-                <th v-for="p in statesStore.processes" class="px-3">
-                  P{{ (p.id < 10) ? `0${p.id}` : p.id }} </th>
+                <th v-for="p in statesStore.processes" class="px-3 py-1">
+                  <code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code>
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="p in statesStore.processes" :key="p.id">
-                <td>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</td>
+                <td><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></td>
                 <td v-for="status in p.statuses">
-                  <v-chip :color="getStatusColor(status.status)" size="x-small" :label="!status.status"
+                  <v-chip class="my-3" :color="getStatusColor(status.status)" size="x-small" :label="!status.status"
                     variant="outlined">{{ (status.status === 0) ? 0 : 1 }}</v-chip>
                 </td>
               </tr>

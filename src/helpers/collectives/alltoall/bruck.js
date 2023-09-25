@@ -22,13 +22,20 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
         if (!undo) {
             resolve(forward(data, k, step, options, state))
         } else {
-            backward(forward(data, k, step, options, state))
+            resolve(backward(data, k, step, options, state))
         }
     })
 }
 
 function backward(data, k, step, options, state) {
-    // todo
+    switch(step.id) {
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            break
+    }
 }
 
 function forward(data, k, step, options, state) {
