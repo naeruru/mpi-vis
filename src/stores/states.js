@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
 
 import collectives from "../data/collectives.js"
 import algorithms from "../helpers/algorithms.js"
@@ -7,7 +6,7 @@ import algorithms from "../helpers/algorithms.js"
 export const useStatesStore = defineStore('states', {
   state: () => ({
 
-    drawer: true,
+    drawer: false,
     rail: true,
 
     timer: null,

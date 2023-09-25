@@ -13,9 +13,18 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
 
         // final comm step k was reached and completed
         // console.log(Math.log2(options.num_processes) - 1)
-        if (step.substep === 2 && k === Math.ceil(Math.log2(options.num_processes)) - 1) {
+        // if (step.substep === 2 && k === Math.ceil(Math.log2(options.num_processes)) - 1) {
+        //     step.id = 2
+        // }
+        if (step.substep === 2 && k === Math.round((Math.log(options.num_processes) / Math.log(options.radix)) * (options.radix - 1)) - 1) {
             step.id = 2
+            console.log('got here')
         }
+
+        console.log(`substep = ${step.substep}`)
+        console.log(`k = ${k}`)
+        console.log(`max comm = ${Math.round((Math.log(options.num_processes) / Math.log(options.radix)) * (options.radix - 1)) - 1}`)
+        // console.log(Math.ceil((Math.log(options.num_processes) / Math.log(options.radix)) - 1 ) * (options.radix - 1))
 
         switch(step.id) {
             case 0: // rotation phase
@@ -65,7 +74,10 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
                 if (step.substep === 0) {
                     // MARK ONLY
                     data.map((p, p_i) => {
-                        let sendTo = p_i + 2 ** k
+                        // let sendTo = p_i + 2 ** k
+                        const z = (k % (options.radix - 1)) + 1
+                        const x = Math.ceil((k + 1) / (options.radix - 1))
+                        let sendTo = p_i + z * options.radix ** (x - 1)
                         if (sendTo > data.length - 1) {
                             sendTo = sendTo - data.length
                         }

@@ -23,7 +23,7 @@
     <v-divider></v-divider>
     <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
 
-      <v-col :cols="(dataViewMinimized) ? 12 : 'auto'" height="100%">
+      <v-col class="pr-2" :cols="(dataViewMinimized) ? 12 : 'auto'" height="100%">
         <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
@@ -35,7 +35,7 @@
           </v-sheet>
           <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
           <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
-            <v-col v-if="statesStore.algorithm.options.binary" class="justify-right">
+            <v-col v-if="statesStore.algorithm.options.binary && (statesStore.num_processes && statesStore.radix)" class="justify-right">
               <h4 class="text-center pb-2"><code>B</code></h4>
               <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
                 <v-chip v-if="statesStore.radix > 1" class="mb-1" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
@@ -59,7 +59,7 @@
         </v-card>
       </v-col>
 
-      <v-col v-if="statesStore.algorithm.receive_buffer" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
+      <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
         <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
@@ -87,8 +87,8 @@
         </v-card>
       </v-col>
 
-      <v-col v-else :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-1" variant="outlined" height="100%" min-width="20vw">
+      <v-col v-else class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
+        <v-card class="py-1" variant="outlined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
@@ -105,7 +105,7 @@
                 <th class="text-left">
 
                 </th>
-                <th v-for="p in statesStore.processes">
+                <th v-for="p in statesStore.processes" class="px-3">
                   P{{ (p.id < 10) ? `0${p.id}` : p.id }} </th>
               </tr>
             </thead>
@@ -135,30 +135,40 @@
     <v-navigation-drawer
       v-if="!smAndDown"
       v-model="statesStore.drawer"
-      :rail="statesStore.rail"
+      app
       permanent
-      @click="statesStore.rail = false"
+      temporary
     >
       <v-list-item nav>
         <template v-slot:prepend>
-          <v-icon class="ml-1" color="primary" size="large" icon="mdi-information-outline"></v-icon>
+          <v-icon class="ml-1 my-2" color="primary" size="large" icon="mdi-information-outline"></v-icon>
         </template>
         <v-list-item-title>Info</v-list-item-title>
         <template v-slot:append>
-          <v-btn
+          <!-- <v-btn
             variant="text"
-            :icon="statesStore.rail ? `mdi-chevron-right` : `mdi-chevron-left`"
-            @click.stop="statesStore.rail = !statesStore.rail"
-          ></v-btn>
+            icon="mdi-chevron-left"
+            @click.stop="statesStore.drawer = !statesStore.drawer"
+          ></v-btn> -->
         </template>
       </v-list-item>
 
       <v-divider></v-divider>
       <!-- <template v-slot:append> -->
-        <v-sheet v-if="!statesStore.rail" flat max-width="500">
-          <v-card-text class=" infotext" v-html="statesStore.step.subtext"></v-card-text>
-        </v-sheet>
+      <v-sheet flat max-width="500">
+        <v-card-text class=" infotext" v-html="statesStore.step.subtext"></v-card-text>
+      </v-sheet>
       <!-- </template> -->
+      <!-- <template v-slot:append>
+        <div class="d-flex justify-right pa-1">
+          <v-spacer></v-spacer>
+          <v-btn
+            variant="text"
+            :icon="statesStore.drawer ? `mdi-chevron-left` : `mdi-chevron-right`"
+            @click.stop="statesStore.drawer = !statesStore.drawer"
+          ></v-btn>
+        </div>
+      </template> -->
     </v-navigation-drawer>
 
 
@@ -192,7 +202,7 @@
         </v-menu>
       </div>
       <div class="d-flex w-100 align-center">
-        <v-menu :close-on-content-click="false" location="top">
+        <!-- <v-menu :close-on-content-click="false" location="top">
           <template v-slot:activator="{ props }">
             <v-btn class="d-none d-md-flex" icon size="x-small" variant="outlined" v-bind="props">
               <v-icon>mdi-help</v-icon>
@@ -212,7 +222,10 @@
             <v-card-text class="text-subtitle-1" v-html="statesStore.step.subtext"></v-card-text>
           </v-card>
 
-        </v-menu>
+        </v-menu> -->
+        <v-btn class="d-none d-md-flex" icon size="x-small" variant="outlined" @click="statesStore.drawer = !statesStore.drawer">
+          <v-icon>mdi-help</v-icon>
+        </v-btn>
 
         <h3 class="mx-2 d-none d-md-flex">{{ statesStore.step.text }}</h3>
 
