@@ -99,7 +99,7 @@
             <h2 class="text-center">Adjacency Matrix</h2>
           </v-sheet>
           <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-          <v-table v-if="!adjMatrixMinimized" density="dense">
+          <v-table v-if="!adjMatrixMinimized" density="compact">
             <thead>
               <tr>
                 <th class="text-left">
@@ -120,7 +120,7 @@
               </tr>
             </tbody>
           </v-table>
-          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center pt-2" height="40">
+          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center pt-" height="40">
             <v-chip class="mx-1" size="small" color="green" prepend-icon="mdi-circle" variant="outlined"
               label>Send</v-chip>
             <v-chip class="mx-1" size="small" color="red" prepend-icon="mdi-circle" variant="outlined"
