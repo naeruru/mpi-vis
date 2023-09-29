@@ -28,10 +28,6 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
 }
 
 function backward(data, k, step, options, state) {
-    console.log(`step.id = ${step.id}`)
-    console.log(`step.substep = ${step.substep}`)
-    console.log(`k = ${k}`)
-    console.log('----------------')
 
     let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
     bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
@@ -274,9 +270,12 @@ function forward(data, k, step, options, state) {
 
 
             let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
-            bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
+            bitstring = bitstring.substring(0, bitstring.length-(Math.floor(k / ( options.radix - 1)))) + ((k % (options.radix - 1)) + 1) + bitstring.substring(bitstring.length-(Math.floor(k / ( options.radix - 1))))
             const commStepInfo = `
-                <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
+                <br><br> For <strong><code>k = <a class="animate">${k}</a></code></strong>, 
+                process <code>i</code> sends all data blocks whose binary value bit 
+                <a class="animate">${Math.floor(k / (options.radix - 1))}</a> is <code>1</code> (ex: <code><a class="animate">${bitstring}</a></code>) 
+                to process <code>i + ${2**k}</code>.
             `
             
             if (step.substep === 0) {
@@ -299,6 +298,8 @@ function forward(data, k, step, options, state) {
                         const blockid = Math.floor(i / options.block_size)
                         const blockbid = ('000000000' + Number(blockid).toString(options.radix)).slice(-10)
                         const kb = ('000000000' + Number(k + 1).toString(options.radix)).slice(-10)
+                        if (!bitstring)
+                            bitstring = ('00000' + i.toString(options.radix)).slice(-Math.ceil(Math.log2(options.num_processes)))
                         // check if bit index is equal to the iterating (1 ≤ 𝑧 < 𝑟)
                         // z = (k % (options.radix - 1)) + 1
                         if (blockbid[blockbid.length - Math.ceil((k + 1) / (options.radix - 1))] == (k % (options.radix - 1)) + 1) {

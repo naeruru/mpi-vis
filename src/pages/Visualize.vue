@@ -46,7 +46,7 @@
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
-                <v-chip :label="block.status >= 1" size="small"
+                <v-chip :class="{ 'thick-border': block.status === 1 }" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
                   <v-avatar flat tile center size="15">
                     {{ block.id }}
@@ -75,7 +75,7 @@
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
-                <v-chip v-if="block" :label="block.status >= 1" size="small"
+                <v-chip v-if="block" :class="{ 'thick-border': block.status === 1 }" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
                   <v-avatar tile flat center size="15">{{ block.id }}</v-avatar>
                   <!-- <strong>{{ block.id }}</strong> -->
@@ -91,9 +91,8 @@
         <v-card class="py-1" variant="outlined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
-            <v-btn icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small"
-              @click="adjMatrixMinimized = false"></v-btn>
+            <v-btn v-if="!adjMatrixMinimized" icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
+            <v-btn v-else icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="adjMatrixMinimized = false"></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
             <h2 class="text-center">Adjacency Matrix</h2>
@@ -140,7 +139,7 @@
       permanent
       temporary
     >
-      <v-list-item nav>
+      <v-list-item nav class="mt-12">
         <template v-slot:prepend>
           <v-icon class="ml-1 my-2" color="primary" size="large" icon="mdi-information-outline"></v-icon>
         </template>
@@ -154,7 +153,7 @@
         </template>
       </v-list-item>
 
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider> -->
       <!-- <template v-slot:append> -->
       <v-sheet flat max-width="500">
         <v-card-text class=" infotext" v-html="statesStore.step.subtext"></v-card-text>
@@ -347,7 +346,7 @@ export default {
     getStatusColor(status) {
       switch (status) {
         case 0:
-          return "white"
+          return "primary--text"
         case 1:
           return "green"
         case 2:
@@ -402,11 +401,15 @@ export default {
 
 .animate {
   animation-name: coloradjust;
-  animation-duration: .4s;
-  color: white;
+  animation-duration: .5s;
+  color: rgb(var(--v-theme-primary--text));
 }
 @keyframes coloradjust {
   from { color: rgb(var(--v-theme-primary)) }
-  to { color: white; }
+  to { color: rgb(var(--v-theme-primary--text)); }
+}
+
+.thick-border {
+  border-width: 2px;
 }
 </style>

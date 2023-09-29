@@ -63,7 +63,7 @@ export default {
                         Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
-                        - Communication phase (containing log<sup>P</sup><sub>2</sub> steps)<br>
+                        - Communication phase (containing <code>log<sup>P</sup><sub>r</sub></code> steps)<br>
                         - Final data rotation phase<br>
                         
                     `,
@@ -81,6 +81,9 @@ export default {
                         In each communication step <code>k</code>, process <code>i</code> sends to rank (<code>i + 2<sup>k</sup></code>) all the data blocks whose <code>k</code>th bit is 1, 
                         receives data from rank (<code>i − 2<sup>k</sup></code>), and stores the incoming data into blocks whose <code>k</code>th bit is 1 (that is, 
                         overwriting the data that was just sent).
+                    `,
+                    "commstep_radix": `
+                            todo
                     `,
                     "final": `
                         All processes have received the correct data. However, it was not in the right order. Thus, a local inverse shift of data blocks from R to R:
