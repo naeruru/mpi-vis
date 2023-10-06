@@ -13,9 +13,21 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
             step: null
         }
 
+        // calculate max comm steps
+        let w = Math.log(options.num_processes) / Math.log(options.radix)
+        // fixes: log_3(9) = 2.0000000000000004
+        if (Math.floor(w) === Math.floor(w-.0000001) || Math.floor(w) === Math.floor(w+.0000001)) w = Math.round(w)
+        let max_comm_steps
+        if ((options.num_processes === options.radix**w) && (w % 1 === 0)) { // (w % 1 === 0) fixes rounding issues
+            // k = w(r-1)
+            max_comm_steps = Math.floor(w) * (options.radix - 1) - 1
+        } else {
+            // k = w(r - 1) - floor((r**(w) - P) / (r**(w-1)))
+            max_comm_steps = w * (options.radix - 1) - Math.floor((options.radix**w - options.num_processes) / (options.radix**(w-1))) - 1
+        }
+        
         // final comm step k was reached and completed
-        const max_comm_steps = Math.round((Math.log(options.num_processes) / Math.log(options.radix)) * (options.radix - 1)) - 1
-        if (step.substep === 2 && k === max_comm_steps) {
+        if (step.substep === 2 && k >= max_comm_steps) {
             step.id = 2
         }
 
@@ -146,7 +158,6 @@ function backward(data, k, step, options, state) {
                         const x = Math.ceil((k + 1) / (options.radix - 1))
                         let sendTo = i + z * options.radix ** (x - 1)
                         sendTo = i - (sendTo - i)
-                        console.log(sendTo)
                         if (sendTo < 0) {
                             sendTo = data.length + sendTo
                         }
@@ -193,7 +204,6 @@ function backward(data, k, step, options, state) {
                 const x = Math.ceil((k + 1) / (options.radix - 1))
                 let sendTo = i + z * options.radix ** (x - 1)
                 sendTo = i - (sendTo - i)
-                console.log(sendTo)
                 if (sendTo < 0) {
                     sendTo = data.length + sendTo
                 }
@@ -270,7 +280,7 @@ function forward(data, k, step, options, state) {
 
 
             let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
-            bitstring = bitstring.substring(0, bitstring.length-(Math.floor(k / ( options.radix - 1)))) + ((k % (options.radix - 1)) + 1) + bitstring.substring(bitstring.length-(Math.floor(k / ( options.radix - 1))))
+            bitstring = bitstring.substring(0, bitstring.length-(Math.floor(k / ( options.radix - 1)))) + ((k % (options.radix - 1)) + 1).toString(options.radix) + bitstring.substring(bitstring.length-(Math.floor(k / ( options.radix - 1))))
             const commStepInfo = `
                 <br><br> For <strong><code>k = <a class="animate">${k}</a></code></strong>, 
                 process <code>i</code> sends all data blocks whose binary value bit 
@@ -302,7 +312,7 @@ function forward(data, k, step, options, state) {
                             bitstring = ('00000' + i.toString(options.radix)).slice(-Math.ceil(Math.log2(options.num_processes)))
                         // check if bit index is equal to the iterating (1 ≤ 𝑧 < 𝑟)
                         // z = (k % (options.radix - 1)) + 1
-                        if (blockbid[blockbid.length - Math.ceil((k + 1) / (options.radix - 1))] == (k % (options.radix - 1)) + 1) {
+                        if (blockbid[blockbid.length - Math.ceil((k + 1) / (options.radix - 1))] == ((k % (options.radix - 1)) + 1).toString(options.radix)) {
                             p.blocks[i].status = 1
                             state.data_pending += 1
                         }
