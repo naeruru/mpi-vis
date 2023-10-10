@@ -44,6 +44,14 @@ export default {
                 "id": "bruck",
                 // used for display name
                 "name": "Bruck",
+                // enabled options
+                options: {
+                    num_processes: true,
+                    block_size: true,
+                    radix: true,
+                    binary: true,
+                    graph: true,
+                },
                 // graph data
                 "data": [[2, 1], [4, 2], [8, 3], [16, 4], [32, 5]],
                 // whether or not the algorithm has multiple schemes
@@ -56,7 +64,7 @@ export default {
                         Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
-                        - Communication phase (containing log<sup>P</sup><sub>2</sub> steps)<br>
+                        - Communication phase (containing <code>log<sup>P</sup><sub>r</sub></code> steps)<br>
                         - Final data rotation phase<br>
                         
                     `,
@@ -75,6 +83,9 @@ export default {
                         receives data from rank (<code>i − 2<sup>k</sup></code>), and stores the incoming data into blocks whose <code>k</code>th bit is 1 (that is, 
                         overwriting the data that was just sent).
                     `,
+                    "commstep_radix": `
+                            todo
+                    `,
                     "final": `
                         All processes have received the correct data. However, it was not in the right order. Thus, a local inverse shift of data blocks from R to R:
                         <br><br>
@@ -85,6 +96,13 @@ export default {
             {
                 "id": "spreadout",
                 "name": "Spread Out",
+                options: {
+                    num_processes: true,
+                    block_size: true,
+                    radix: false,
+                    binary: false,
+                    graph: false,
+                },
                 "data": [[2, 1], [4, 3], [8, 7], [16, 15], [32, 31]],
                 "receive_buffer": true,
                 "info": {
