@@ -24,7 +24,7 @@
     <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
 
       <v-col class="pr-2" :cols="(dataViewMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
+        <v-card class="pa-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn :icon="(dataViewMinimized) ? `mdi-window-maximize` : `mdi-minus`" variant="text" size="x-small" @click="dataViewMinimized = !dataViewMinimized"></v-btn>
@@ -34,11 +34,11 @@
             <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
           <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
-          <v-sheet v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
+          <v-sheet  v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
             <v-col v-if="statesStore.algorithm.options.binary && (statesStore.num_processes && statesStore.radix)" class="justify-right">
               <h4 class="text-center pb-2"><code>B</code></h4>
               <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
-                <v-chip v-if="statesStore.radix > 1" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
+                <v-chip v-if="statesStore.radix > 1 && statesStore.radix < 36 " size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
                   {{ ('00000' + i.toString(statesStore.radix)).slice(-Math.ceil(Math.log2(statesStore.num_processes))) }}
                 </v-chip>
               </v-row>
@@ -46,9 +46,9 @@
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
-                <v-chip :class="{ 'thick-border': block.status === 1 }" :label="block.status >= 1" size="small"
+                <v-chip :class="{ 'blink-2': block.status === 2 }" :style="{ 'border-width': border_width(block.status) }" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
-                  <v-avatar flat tile center size="15">
+                  <v-avatar flat rounded="0" center class="font-weight-black text-subtitle-2">
                     {{ block.id }}
                   </v-avatar>
                   <!-- <strong>{{ block.id }}</strong> -->
@@ -60,7 +60,7 @@
       </v-col>
 
       <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-1" variant="outlined" min-height="100%" min-width="20vw">
+        <v-card class="pa-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn :icon="(adjMatrixMinimized) ? `mdi-window-maximize` : `mdi-minus`" variant="text" size="x-small" @click="adjMatrixMinimized = !adjMatrixMinimized"></v-btn>
@@ -88,7 +88,7 @@
       </v-col>
 
       <v-col v-else class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="py-1" variant="outlined" height="100%" min-width="20vw">
+        <v-card class="py-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn v-if="!adjMatrixMinimized" icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
@@ -101,9 +101,7 @@
           <v-table v-if="!adjMatrixMinimized" density="compact">
             <thead>
               <tr>
-                <th class="text-left">
-
-                </th>
+                <th class="text-left"></th>
                 <th v-for="p in statesStore.processes" class="px-3 py-1">
                   <code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code>
                 </th>
@@ -119,7 +117,7 @@
               </tr>
             </tbody>
           </v-table>
-          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center pt-" height="40">
+          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center pt-2" height="40">
             <v-chip class="mx-1" size="small" color="green" prepend-icon="mdi-circle" variant="outlined"
               label>Send</v-chip>
             <v-chip class="mx-1" size="small" color="red" prepend-icon="mdi-circle" variant="outlined"
@@ -156,21 +154,41 @@
       <!-- <v-divider></v-divider> -->
       <!-- <template v-slot:append> -->
       <v-sheet flat max-width="500">
-        <v-card-text class=" infotext" v-html="statesStore.step.subtext"></v-card-text>
+        <v-card-text class="infotext" v-html="statesStore.step.subtext"></v-card-text>
       </v-sheet>
+
+      <v-divider></v-divider>
+      <v-card-title>
+        Stats
+      </v-card-title>
+
+        <v-list>
+          <v-list-item title="Total blocks moved">
+            <template v-slot:append>
+              <span class="text-primary">{{ statesStore.data_moved }}</span>
+            </template>
+          </v-list-item>
+          <v-list-item title="Comm Step (K)">
+            <template v-slot:append>
+              <span class="text-primary">{{ statesStore.k }}</span>
+            </template>
+          </v-list-item>
+        </v-list>
+
+      <v-btn v-if="statesStore.algorithm.options.graph" height="55" variant="tonal" color="primary" block @click="toggle_graph">
+        View Graph
+      </v-btn>
+
+      
       <!-- </template> -->
       <!-- <template v-slot:append>
-        <div class="d-flex justify-right pa-1">
-          <v-spacer></v-spacer>
-          <v-btn
-            variant="text"
-            :icon="statesStore.drawer ? `mdi-chevron-left` : `mdi-chevron-right`"
-            @click.stop="statesStore.drawer = !statesStore.drawer"
-          ></v-btn>
-        </div>
+          
+        
       </template> -->
     </v-navigation-drawer>
 
+    
+    <BlocksMovedDialog v-model="graph_dialog" :processes="statesStore.num_processes"></BlocksMovedDialog>
 
     <!-- <ControlFooter
       :title="step.text"
@@ -202,27 +220,7 @@
         </v-menu>
       </div>
       <div class="d-flex w-100 align-center">
-        <!-- <v-menu :close-on-content-click="false" location="top">
-          <template v-slot:activator="{ props }">
-            <v-btn class="d-none d-md-flex" icon size="x-small" variant="outlined" v-bind="props">
-              <v-icon>mdi-help</v-icon>
-            </v-btn>
-          </template>
 
-          <v-card max-width="500">
-            <v-card-item>
-              <v-card-title>{{ statesStore.step.text }}</v-card-title>
-              <v-card-subtitle>
-                <p v-if="statesStore.data_pending === 0">{{ statesStore.data_moved }} total blocks moved</p>
-                <p v-else>{{ statesStore.data_moved }} total blocks moved ({{ statesStore.data_pending }} blocks sending)
-                </p>
-              </v-card-subtitle>
-            </v-card-item>
-            <v-divider class="mx-4"></v-divider>
-            <v-card-text class="text-subtitle-1" v-html="statesStore.step.subtext"></v-card-text>
-          </v-card>
-
-        </v-menu> -->
         <v-btn class="d-none d-md-flex" icon size="x-small" variant="outlined" @click="statesStore.drawer = !statesStore.drawer">
           <v-icon>mdi-help</v-icon>
         </v-btn>
@@ -277,12 +275,12 @@ import { useStatesStore } from '../stores/states'
 
 import { useDisplay } from 'vuetify'
 
-import ControlFooter from "../components/Visualize/ControlFooter.vue"
+import BlocksMovedDialog from "../components/dialogs/BlocksMovedDialog.vue"
 
 export default {
   name: 'Visualize',
 
-  components: { ControlFooter },
+  components: { BlocksMovedDialog },
   data() {
     return {
       valid_options: true,
@@ -293,6 +291,8 @@ export default {
       adjMatrixMinimized: false,
 
       outer_size: 200,
+
+      graph_dialog: false,
 
       num_processes_rules: [
         v => !!v || "This field is required",
@@ -319,7 +319,7 @@ export default {
           '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
           '#beb0f8', '#f1dcb0']
       } else {
-        return ['blue', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white',
+        return ['blue', 'orange', 'green', 'red', 'yellow-accent-4', '#B388FF', 'cyan', '#bf00a6', 'grey', '#64FFDA', 'black',
           '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA',
           '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
           '#beb0f8', '#f1dcb0']
@@ -343,6 +343,18 @@ export default {
     }
   },
   methods: {
+    toggle_graph() {
+      this.graph_dialog = !this.graph_dialog
+    },
+    border_width(status) {
+      if (status === 1) {
+        return '2px'
+      } else if (this.statesStore.step.substep === 1) {
+        return '1px'
+      } else {
+        return '2px'
+      }
+    },
     getStatusColor(status) {
       switch (status) {
         case 0:
@@ -409,7 +421,17 @@ export default {
   to { color: rgb(var(--v-theme-primary--text)); }
 }
 
+.blink-2 {
+  animation-name: opacityadjust;
+  animation-duration: .25s;
+  opacity: 1;
+}
+@keyframes opacityadjust {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .thick-border {
-  border-width: 2px;
+  border-width: 3px;
 }
 </style>

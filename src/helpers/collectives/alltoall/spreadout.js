@@ -190,7 +190,6 @@ function forward(data, k, step, num_processes, block_size, state) {
             return state
             break
         case 1:
-            console.log('h')
             // final step
             data.map(p => {
                 const markedBlocks = p.blocks.filter(block => block.color === block.id)

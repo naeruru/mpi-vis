@@ -9,7 +9,7 @@
                             v-for="(collective, i) in collectives" 
                             :key="i" :value="collective"
                             :active="(collective.id === $route.params.id)"
-                            active-color="primary"
+                            color="primary"
                             @click="$router.push({ path: `/c/${collective.id}` })"
                         >
                             <v-list-item-title v-text="collective.name"></v-list-item-title>

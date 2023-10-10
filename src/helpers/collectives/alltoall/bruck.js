@@ -16,14 +16,18 @@ export function bruck(data, k, step, options, data_moved, undo=false) {
         // calculate max comm steps
         let w = Math.log(options.num_processes) / Math.log(options.radix)
         // fixes: log_3(9) = 2.0000000000000004
-        if (Math.floor(w) === Math.floor(w-.0000001) || Math.floor(w) === Math.floor(w+.0000001)) w = Math.round(w)
+        if (Math.floor(w) !== Math.floor(w-.0000001) || Math.floor(w) !== Math.floor(w+.0000001)) w = Math.round(w)
+        w = Math.ceil(w)
+        let rw = options.radix**w
+        if (Math.floor(rw) !== Math.floor(rw-.0000001) || Math.floor(rw) !== Math.floor(rw+.0000001)) rw = Math.round(rw)
+
         let max_comm_steps
-        if ((options.num_processes === options.radix**w) && (w % 1 === 0)) { // (w % 1 === 0) fixes rounding issues
+        if ((options.num_processes === rw)) { // (w % 1 === 0) fixes rounding issues
             // k = w(r-1)
-            max_comm_steps = Math.floor(w) * (options.radix - 1) - 1
+            max_comm_steps = w * (options.radix - 1) - 1
         } else {
             // k = w(r - 1) - floor((r**(w) - P) / (r**(w-1)))
-            max_comm_steps = w * (options.radix - 1) - Math.floor((options.radix**w - options.num_processes) / (options.radix**(w-1))) - 1
+            max_comm_steps = w * (options.radix - 1) - Math.floor((rw - options.num_processes) / (options.radix**(w-1))) - 1
         }
         
         // final comm step k was reached and completed
@@ -44,7 +48,11 @@ function backward(data, k, step, options, state) {
     let bitstring = new Array(Math.ceil(Math.log2(options.num_processes))).join("0")
     bitstring = bitstring.substring(0, bitstring.length-k) + '1' + bitstring.substring(bitstring.length-k)
     const commStepInfo = `
-        <br><br> For <strong><code>k = ${k}</code></strong>, process <code>i</code> sends all data blocks whose binary value bit ${k} is <code>1</code> (ex: <code>${bitstring}</code>) to process <code>i + ${2**k}</code>.
+        <br><br> 
+        For <strong><code>k = ${k}</code></strong>, 
+        process <code>i</code> sends all data blocks whose binary value bit ${k} is 
+        <code>1</code> (ex: <code>${bitstring}</code>) 
+        to process <code>i + ${2**k}</code>.
     `
     switch(step.id) {
         case 0:
@@ -285,7 +293,7 @@ function forward(data, k, step, options, state) {
                 <br><br> For <strong><code>k = <a class="animate">${k}</a></code></strong>, 
                 process <code>i</code> sends all data blocks whose binary value bit 
                 <a class="animate">${Math.floor(k / (options.radix - 1))}</a> is <code>1</code> (ex: <code><a class="animate">${bitstring}</a></code>) 
-                to process <code>i + ${2**k}</code>.
+                to process <code>i + <a class="animate">${2**k}</a></code>.
             `
             
             if (step.substep === 0) {

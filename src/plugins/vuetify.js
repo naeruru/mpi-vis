@@ -7,13 +7,14 @@ import { createVuetify } from 'vuetify'
 
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: 'light',
     themes: {
       light: {
         dark: false,
         colors: {
           background: '#faeff5',
           surface: '#f2e6ed',
+          container: '#e3c8d7',
           primary: '#bb86fc',
           secondary: '#fcb6cc',
           error: '#EF5350',

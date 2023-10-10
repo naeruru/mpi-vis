@@ -50,6 +50,7 @@ export default {
                     block_size: true,
                     radix: true,
                     binary: true,
+                    graph: true,
                 },
                 // graph data
                 "data": [[2, 1], [4, 2], [8, 3], [16, 4], [32, 5]],
@@ -100,6 +101,7 @@ export default {
                     block_size: true,
                     radix: false,
                     binary: false,
+                    graph: false,
                 },
                 "data": [[2, 1], [4, 3], [8, 7], [16, 15], [32, 31]],
                 "receive_buffer": true,
