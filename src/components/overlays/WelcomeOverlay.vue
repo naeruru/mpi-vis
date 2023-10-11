@@ -10,7 +10,7 @@
             </template>
             <v-card-text class="text-subtitle-1 py-2 mb-4">
                 This page lets you visualize a specific algorithm from MPI and view detailed information on its steps and other useful information.
-                Since this is you first time, refer below for buttons and what they do.
+                Refer below for various controls.
             </v-card-text>
             <v-card-text v-for="control in controls" class="text-subtitle-1 py-2">
                 <v-icon class="me-2" :color="control.color">{{ control.icon }}</v-icon>
