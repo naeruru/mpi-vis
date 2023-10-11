@@ -7,8 +7,24 @@
             <v-divider></v-divider>
             <v-card-text class="text-subtitle-1"  v-html="collectives[$route.params.id].body"></v-card-text>
             <v-card-title class="text-wrap">Click on an algorithm below to get started</v-card-title>
-            <v-divider class="mb-4"></v-divider>
-            <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart>
+            <v-divider></v-divider>
+            <v-expansion-panels variant="inset">
+                <v-expansion-panel v-for="algorithm in collectives[$route.params.id].algorithms">
+                    <v-expansion-panel-title>
+                        <template v-slot:default="{ expanded }">
+                            <span class="text-subtitle-1" :class="{'text-primary': expanded}">{{ algorithm.name }}</span>
+                        </template>
+                        <template v-slot:actions="{ expanded }">
+                            <v-icon v-if="!expanded" icon="mdi-chevron-down"></v-icon>
+                            <v-btn v-else color="primary" @click="$router.push({ path: `/vis/${$route.params.id}/${algorithm.id}` })">visualize</v-btn>
+                        </template>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        {{ algorithm.desc }}
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+            <!-- <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart> -->
         </v-card>
     </v-container>
 </template>

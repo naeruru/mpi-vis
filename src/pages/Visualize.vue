@@ -23,18 +23,23 @@
     <v-divider></v-divider>
     <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
 
-      <v-col class="pr-2" :cols="(dataViewMinimized) ? 12 : 'auto'" height="100%">
-        <v-card class="pa-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
+      <v-col class="pr-2" :cols="(dataViewMinimized) ? 12 : 6" height="100%">
+        <v-card class="pa-1 mb-2" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn :icon="(dataViewMinimized) ? `mdi-window-maximize` : `mdi-minus`" variant="text" size="x-small" @click="dataViewMinimized = !dataViewMinimized"></v-btn>
+            <v-btn
+              :icon="(dataViewMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              variant="text"
+              size="x-small"
+              @click="dataViewMinimized = !dataViewMinimized"
+            ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
             <h2 v-if="statesStore.algorithm.receive_buffer" class="text-center">Send Buffer</h2>
             <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
-          <v-divider v-if="!dataViewMinimized" class="pb-4"></v-divider>
-          <v-sheet  v-if="!dataViewMinimized" color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
+          <v-divider class="pb-4"></v-divider>
+          <v-sheet color="transparent" class="d-flex justify-left overflow-x-auto" height="92%">
             <v-col v-if="statesStore.algorithm.options.binary && (statesStore.num_processes && statesStore.radix)" class="justify-right">
               <h4 class="text-center pb-2"><code>B</code></h4>
               <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
@@ -48,7 +53,7 @@
               <v-row v-for="block in p.blocks" class="py-2 d-flex justify-center">
                 <v-chip :class="{ 'blink-2': block.status === 2 }" :style="{ 'border-width': border_width(block.status) }" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
-                  <v-avatar flat rounded="0" center class="font-weight-black text-subtitle-2">
+                  <v-avatar class="font-weight-black text-subtitle-2">
                     {{ block.id }}
                   </v-avatar>
                   <!-- <strong>{{ block.id }}</strong> -->
@@ -59,25 +64,30 @@
         </v-card>
       </v-col>
 
-      <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
+      <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 6" height="100%">
         <v-card class="pa-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn :icon="(adjMatrixMinimized) ? `mdi-window-maximize` : `mdi-minus`" variant="text" size="x-small" @click="adjMatrixMinimized = !adjMatrixMinimized"></v-btn>
+            <v-btn
+              :icon="(adjMatrixMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              variant="text"
+              size="x-small"
+              @click="adjMatrixMinimized = !adjMatrixMinimized"
+            ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
             <h2 v-if="statesStore.algorithm.receive_buffer" class="text-center">Receive Buffer</h2>
             <h2 v-else class="text-center">Data View</h2>
           </v-sheet>
-          <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-left overflow-x-auto"
+          <v-divider class="pb-4"></v-divider>
+          <v-sheet color="transparent" class="d-flex justify-left overflow-x-auto"
             height="92%">
             <v-col v-for="p in statesStore.processes" width="100%">
               <h4 class="text-center pb-2"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></h4>
               <v-row v-for="block in p.receive_buffer" class="py-2 d-flex justify-center">
                 <v-chip v-if="block" :class="{ 'thick-border': block.status === 1 }" :label="block.status >= 1" size="small"
                   :variant="(block.status === 2) ? 'tonal' : 'outlined'" :color="colors[block.color]">
-                  <v-avatar tile flat center size="15">{{ block.id }}</v-avatar>
+                  <v-avatar tile size="15">{{ block.id }}</v-avatar>
                   <!-- <strong>{{ block.id }}</strong> -->
                 </v-chip>
                 <v-chip v-else size="small" label>--</v-chip>
@@ -87,18 +97,22 @@
         </v-card>
       </v-col>
 
-      <v-col v-else class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 'auto'" height="100%">
+      <v-col v-else class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 6" height="100%">
         <v-card class="py-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
-            <v-btn v-if="!adjMatrixMinimized" icon="mdi-minus" variant="text" size="x-small" @click="adjMatrixMinimized = true"></v-btn>
-            <v-btn v-else icon="mdi-window-maximize" variant="text" class="ml-2" size="x-small" @click="adjMatrixMinimized = false"></v-btn>
+            <v-btn
+              :icon="(adjMatrixMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              variant="text"
+              size="x-small"
+              @click="adjMatrixMinimized = !adjMatrixMinimized"
+            ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
             <h2 class="text-center">Adjacency Matrix</h2>
           </v-sheet>
-          <v-divider v-if="!adjMatrixMinimized" class="pb-4"></v-divider>
-          <v-table v-if="!adjMatrixMinimized" density="compact">
+          <v-divider class="pb-4"></v-divider>
+          <v-table density="compact">
             <thead>
               <tr>
                 <th class="text-left"></th>
@@ -142,17 +156,8 @@
           <v-icon class="ml-1 my-2" color="primary" size="large" icon="mdi-information-outline"></v-icon>
         </template>
         <v-list-item-title>Info</v-list-item-title>
-        <template v-slot:append>
-          <!-- <v-btn
-            variant="text"
-            icon="mdi-chevron-left"
-            @click.stop="statesStore.drawer = !statesStore.drawer"
-          ></v-btn> -->
-        </template>
       </v-list-item>
 
-      <!-- <v-divider></v-divider> -->
-      <!-- <template v-slot:append> -->
       <v-sheet flat max-width="500">
         <v-card-text class="infotext" v-html="statesStore.step.subtext"></v-card-text>
       </v-sheet>
@@ -178,17 +183,12 @@
       <v-btn v-if="statesStore.algorithm.options.graph" height="55" variant="tonal" color="primary" block @click="toggle_graph">
         View Graph
       </v-btn>
-
-      
-      <!-- </template> -->
-      <!-- <template v-slot:append>
-          
-        
-      </template> -->
     </v-navigation-drawer>
 
     
     <BlocksMovedDialog v-model="graph_dialog" :processes="statesStore.num_processes"></BlocksMovedDialog>
+
+    <WelcomeOverlay :overlay="overlay_main" :page="overlay_page"></WelcomeOverlay>
 
     <!-- <ControlFooter
       :title="step.text"
@@ -276,13 +276,17 @@ import { useStatesStore } from '../stores/states'
 import { useDisplay } from 'vuetify'
 
 import BlocksMovedDialog from "../components/dialogs/BlocksMovedDialog.vue"
+import WelcomeOverlay from "../components/overlays/WelcomeOverlay.vue"
 
 export default {
   name: 'Visualize',
 
-  components: { BlocksMovedDialog },
+  components: { BlocksMovedDialog, WelcomeOverlay },
   data() {
     return {
+      overlay_main: false,
+      overlay_page: 0,
+
       valid_options: true,
 
       scheme: null,
@@ -314,13 +318,13 @@ export default {
   computed: {
     colors() {
       if (this.$vuetify.theme.name === 'dark') {
-        return ['blue', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white',
-          '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA',
+        return ['#6961ff', 'orange', 'green', 'red', 'yellow', '#B388FF', 'cyan', '#E6EE9C', 'grey', '#64FFDA', 'white',
+          '#76FF03', '#80CBC4', 'blue', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA',
           '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
           '#beb0f8', '#f1dcb0']
       } else {
-        return ['blue', 'orange', 'green', 'red', 'yellow-accent-4', '#B388FF', 'cyan', '#bf00a6', 'grey', '#64FFDA', 'black',
-          '#76FF03', '#80CBC4', '#FFE082', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA',
+        return ['#6961ff', 'orange', 'green', 'red', 'yellow-accent-4', '#B388FF', 'cyan', '#bf00a6', 'grey', '#64FFDA', 'black',
+          '#76FF03', '#80CBC4', 'blue', '#00E676', '#6200EA', '#F48FB1', 'brown', '#546E7A', '#FF9E80', '#B9F6CA',
           '#00BFA5', '#C51162', '#FFCDD2', '#1B5E20', '#D500F9', '#F50057', '#827717', '#00E5FF', '#304FFE',
           '#beb0f8', '#f1dcb0']
       }
@@ -382,13 +386,18 @@ export default {
         this.statesStore.num_processes = 8
         break
       default:
+        this.statesStore.num_processes = 16
         break
     }
+
+    this.statesStore.block_size = 1
+    this.statesStore.radix = 2
 
     this.statesStore.reset()
   },
   mounted() {
     this.$refs.settingsForm.validate()
+    this.overlay_main = this.statesStore.welcome
   },
   beforeDestroy() {
     clearInterval(this.statesStore.timer)
@@ -432,6 +441,6 @@ export default {
 }
 
 .thick-border {
-  border-width: 3px;
+  border-width: 2px;
 }
 </style>

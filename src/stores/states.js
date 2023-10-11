@@ -3,11 +3,10 @@ import { defineStore } from 'pinia'
 import collectives from "../data/collectives.js"
 import algorithms from "../helpers/algorithms.js"
 
-import { useTheme } from 'vuetify'
-
 export const useStatesStore = defineStore('states', {
   state: () => ({
 
+    welcome: true,
     theme: 'dark',
 
     drawer: false,

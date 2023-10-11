@@ -13,7 +13,7 @@
         <v-app-bar-title>{{ title }}</v-app-bar-title>
 
         <template v-slot:append>
-          <v-btn icon class="mr-2" @click="toggle_theme">
+          <v-btn icon @click="toggle_theme">
             <v-icon v-if="$vuetify.theme.name === 'dark'" size="large">mdi-weather-sunny</v-icon>
             <v-icon v-else size="large">mdi-weather-night</v-icon>
           </v-btn>

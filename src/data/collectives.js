@@ -13,9 +13,9 @@ export default {
         <code>MPI_Alltoall</code> is a widely used collective routine
         that facilitates uniform data exchange between every pair of
         processes. The standard implementation of MPI_Alltoall in
-        MPI libraries (e.g., <a href="https://www.mpich.org/" target="_blank">MPICH</a>, 
-        <a href="https://www.open-mpi.org/" target="_blank">Open-MPI</a>) uses a combination of
-        techniques, such as the spread-out algorithm and the Bruck
+        MPI libraries (e.g., <a href="https://www.mpich.org/" class="text-decoration-none" target="_blank">MPICH</a>, 
+        <a href="https://www.open-mpi.org/" class="text-decoration-none" target="_blank">Open-MPI</a>) 
+        uses a combination of techniques, such as the spread-out algorithm and the Bruck
         algorithm. The spread-out algorithm has a linear complexity in
         process count P, whereas the Bruck algorithm has a logarithmic
         complexity in P. The Bruck algorithm transfers more data
@@ -41,11 +41,15 @@ export default {
         "algorithms": [
             {
                 // used for routing, and other in place variables
-                "id": "bruck",
+                "id": "0",
                 // used for display name
                 "name": "Bruck",
+                // description text
+                "desc": `
+                    todo
+                `,
                 // enabled options
-                options: {
+                "options": {
                     num_processes: true,
                     block_size: true,
                     radix: true,
@@ -94,9 +98,12 @@ export default {
                 }
             },
             {
-                "id": "spreadout",
+                "id": "1",
                 "name": "Spread Out",
-                options: {
+                "desc": `
+                    todo
+                `,
+                "options": {
                     num_processes: true,
                     block_size: true,
                     radix: false,

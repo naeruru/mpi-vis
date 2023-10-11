@@ -10,16 +10,16 @@
                     <v-btn icon="mdi-close" @click="close"></v-btn>
                 </v-card-actions>
             </v-sheet>
-            <v-card-text class="red-text mt-4">
+            <v-card-text class="mt-4">
                 <v-row>
                     <v-col :cols=12>
                         As Radix (r) changes, 
-                        <span class="text-light-blue font-weight-bold">data-blocks transmitted (D)</span> 
+                        <span class="text-deep-purple-accent-1 font-weight-bold">data-blocks transmitted (D)</span> 
                         and  
-                        <span class="text-orange font-weight-bold">communication rounds (K)</span> 
+                        <span class="text-pink-accent-1 font-weight-bold">communication rounds (K)</span> 
                         will decrease and increase respectively. A discontinuity is 
-                        observed for both <span class="text-light-blue font-weight-bold">D</span> 
-                        and <span class="text-orange font-weight-bold">K</span>. This inflection point 
+                        observed for both <span class="text-deep-purple-accent-1 font-weight-bold">D</span> 
+                        and <span class="text-pink-accent-1 font-weight-bold">K</span>. This inflection point 
                         is observed to happen when <code>r = &Sqrt;P</code>, and can be considered the 
                         "optimal radix."
                     </v-col>
@@ -87,9 +87,15 @@ export default {
                     mode: this.theme.global.name.value,
                     palette: 'palette6'
                 },
+                colors: ["#B388FF", "#FF80AB"],
                 legend: {
                     position: 'top',
                     fontSize: '18px'
+                },
+                tooltip: {
+                    x: {
+                        formatter: (value) => `radix = ${value}` 
+                    }
                 },
                 xaxis: {
                     title: { text: 'Radix (r)', style: { fontSize: '20px'} },
@@ -98,9 +104,6 @@ export default {
                         style: { fontSize: '14px'},
                     },
                 },
-                // yaxis: {
-                //     title: { text: 'Communication steps', style: { fontSize: '14px'}  }
-                // },
                 yaxis: [
                     {
                         title: {
