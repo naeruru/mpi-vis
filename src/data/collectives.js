@@ -46,7 +46,12 @@ export default {
                 "name": "Bruck",
                 // description text
                 "desc": `
-                    todo
+                    Bruck is an efficient log based MPI_Alltoall communication algorithm that is 
+                    suitable for latency bound short messages. It is log based in the face that the 
+                    number of communication steps is based on Log<sub>2</sub>P, where P is the number 
+                    of processes. Note, that this can be improved by allowing the base (2 in normal Bruck) 
+                    to be paramterized and adjusted from 2 to P-1. This allows Bruck to find an optimal 
+                    balance between latency and bandwidth messages.
                 `,
                 // enabled options
                 "options": {
@@ -68,7 +73,7 @@ export default {
                         Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
-                        - Communication phase (containing <code>log<sup>P</sup><sub>r</sub></code> steps)<br>
+                        - Communication phase (controlled by <code>P</code> and <code>r</code>)<br>
                         - Final data rotation phase<br>
                         
                     `,
@@ -101,7 +106,11 @@ export default {
                 "id": "1",
                 "name": "Spread Out",
                 "desc": `
-                    todo
+                    In comparision to Bruck, spread-out is an MPI_Alltoall algorithm 
+                    that takes a linear number of communication steps based on P, 
+                    the number of processes. This means that spread-out transfers over
+                    more communication steps, making it more suited for longer, 
+                    bandwidth-dominated messages.
                 `,
                 "options": {
                     num_processes: true,

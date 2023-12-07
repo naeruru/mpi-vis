@@ -20,7 +20,7 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        {{ algorithm.desc }}
+                        <p v-html="algorithm.desc"></p>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>

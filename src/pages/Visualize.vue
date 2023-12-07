@@ -23,15 +23,15 @@
     <v-divider></v-divider>
     <v-sheet color="transparent" class="d-flex justify-center flex-wrap">
 
-      <v-col class="pr-2" :cols="(dataViewMinimized) ? 12 : 6" height="100%">
+      <v-col class="pr-2" :cols="(dataViewMaximized) ? 12 : 6" height="100%">
         <v-card class="pa-1 mb-2" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn
-              :icon="(dataViewMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              :icon="(dataViewMaximized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
               variant="text"
               size="x-small"
-              @click="dataViewMinimized = !dataViewMinimized"
+              @click="dataViewMaximized = !dataViewMaximized"
             ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
@@ -43,7 +43,7 @@
             <v-col v-if="statesStore.algorithm.options.binary && (statesStore.num_processes && statesStore.radix)" class="justify-right">
               <h4 class="text-center pb-2"><code>B</code></h4>
               <v-row v-for="(block, i) in statesStore.processes[0].blocks" class="py-2 d-flex justify-center">
-                <v-chip v-if="statesStore.radix > 1 && statesStore.radix < 36 " size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
+                <v-chip v-if="statesStore.radix > 1 && statesStore.radix < 36 " class="text-subtitle-2" size="small" variant="text" label :color="(block.status > 0 || !statesStore.started) ? 'primary' : 'black'">
                   {{ ('00000' + i.toString(statesStore.radix)).slice(-Math.ceil(Math.log2(statesStore.num_processes))) }}
                 </v-chip>
               </v-row>
@@ -64,15 +64,15 @@
         </v-card>
       </v-col>
 
-      <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 6" height="100%">
+      <v-col v-if="statesStore.algorithm.receive_buffer" class="pl-2" :cols="(adjMatrixMaximized) ? 12 : 6" height="100%">
         <v-card class="pa-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" min-height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn
-              :icon="(adjMatrixMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              :icon="(adjMatrixMaximized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
               variant="text"
               size="x-small"
-              @click="adjMatrixMinimized = !adjMatrixMinimized"
+              @click="adjMatrixMaximized = !adjMatrixMaximized"
             ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
@@ -97,15 +97,15 @@
         </v-card>
       </v-col>
 
-      <v-col v-else class="pl-2" :cols="(adjMatrixMinimized) ? 12 : 6" height="100%">
+      <v-col v-else class="pl-2" :cols="(adjMatrixMaximized) ? 12 : 6" height="100%">
         <v-card class="py-1" :variant="$vuetify.theme.name === 'dark' ? 'outlined' : undefined" height="100%" min-width="20vw">
           <v-sheet color="transparent" class="d-flex justify-center" height="20">
             <v-spacer></v-spacer>
             <v-btn
-              :icon="(adjMatrixMinimized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
+              :icon="(adjMatrixMaximized) ? `mdi-minus` : `mdi-checkbox-multiple-blank-outline`"
               variant="text"
               size="x-small"
-              @click="adjMatrixMinimized = !adjMatrixMinimized"
+              @click="adjMatrixMaximized = !adjMatrixMaximized"
             ></v-btn>
           </v-sheet>
           <v-sheet color="transparent" class="d-flex justify-center" height="40">
@@ -115,23 +115,23 @@
           <v-table density="compact">
             <thead>
               <tr>
-                <th class="text-left"></th>
-                <th v-for="p in statesStore.processes" class="px-3 py-1">
+                <th></th>
+                <th v-for="p in statesStore.processes" class="px-1 py-1">
                   <code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="p in statesStore.processes" :key="p.id">
-                <td><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></td>
-                <td v-for="status in p.statuses">
-                  <v-chip class="my-3" :color="getStatusColor(status.status)" size="x-small" :label="!status.status"
+                <td class="px-0 pl-4"><code>P{{ (p.id < 10) ? `0${p.id}` : p.id }}</code></td>
+                <td v-for="status in p.statuses" class="px-2">
+                  <v-chip class="my-3" :color="getStatusColor(status.status)" :style="{ 'border-width': '2px' }" size="x-small" :label="!status.status"
                     variant="outlined">{{ (status.status === 0) ? 0 : 1 }}</v-chip>
                 </td>
               </tr>
             </tbody>
           </v-table>
-          <v-sheet v-if="!adjMatrixMinimized" color="transparent" class="d-flex justify-center pt-2" height="40">
+          <v-sheet v-if="!adjMatrixMaximized" color="transparent" class="d-flex justify-center pt-2" height="40">
             <v-chip class="mx-1" size="small" color="green" prepend-icon="mdi-circle" variant="outlined"
               label>Send</v-chip>
             <v-chip class="mx-1" size="small" color="red" prepend-icon="mdi-circle" variant="outlined"
@@ -291,8 +291,8 @@ export default {
 
       scheme: null,
 
-      dataViewMinimized: false,
-      adjMatrixMinimized: false,
+      dataViewMaximized: false,
+      adjMatrixMaximized: false,
 
       outer_size: 200,
 
@@ -381,9 +381,13 @@ export default {
     switch (this.$vuetify.display.name) {
       case 'sm':
         this.statesStore.num_processes = 12
+        this.dataViewMaximized = true
+        this.adjMatrixMaximized = true
         break
       case 'xs':
         this.statesStore.num_processes = 8
+        this.dataViewMaximized = true
+        this.adjMatrixMaximized = true
         break
       default:
         this.statesStore.num_processes = 16
