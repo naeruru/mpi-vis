@@ -10,32 +10,34 @@ export default {
         "name": "All to All",
         // route specific page text
         body: `
-        <code>MPI_Alltoall</code> is a widely used collective routine
-        that facilitates uniform data exchange between every pair of
-        processes. The standard implementation of MPI_Alltoall in
-        MPI libraries (e.g., <a href="https://www.mpich.org/" class="text-decoration-none" target="_blank">MPICH</a>, 
-        <a href="https://www.open-mpi.org/" class="text-decoration-none" target="_blank">Open-MPI</a>) 
-        uses a combination of techniques, such as the spread-out algorithm and the Bruck
-        algorithm. The spread-out algorithm has a linear complexity in
-        process count P, whereas the Bruck algorithm has a logarithmic
-        complexity in P. The Bruck algorithm transfers more data
-        with fewer communication steps than linear algorithms, and
-        is thus better suited for relatively small sized (i.e., latency-dominated) 
-        messages. The spread-out performs better for large-sized 
-        messages (bandwidth-dominated). Despite the fact that MPI
-        libraries implement MPI_Alltoall using multiple algorithms,
-        the difference may not be apparent as implementations dynamically 
-        choose the underlying algorithm to use depending upon
-        process count and message size, based on rules in a pre-defined
-        configuration file.
+            <p>
+                <code>MPI_Alltoall</code> is a widely used collective routine
+                that facilitates uniform data exchange between every pair of
+                processes. The standard implementation of MPI_Alltoall in
+                MPI libraries (e.g., <a href="https://www.mpich.org/" class="text-decoration-none" target="_blank">MPICH</a>, 
+                <a href="https://www.open-mpi.org/" class="text-decoration-none" target="_blank">Open-MPI</a>) 
+                uses a combination of techniques, such as the spread-out algorithm and the Bruck
+                algorithm. The spread-out algorithm has a linear complexity in
+                process count P, whereas the Bruck algorithm has a logarithmic
+                complexity in P. The Bruck algorithm transfers more data
+                with fewer communication steps than linear algorithms, and
+                is thus better suited for relatively small sized (i.e., latency-dominated) 
+                messages. The spread-out performs better for large-sized 
+                messages (bandwidth-dominated). Despite the fact that MPI
+                libraries implement MPI_Alltoall using multiple algorithms,
+                the difference may not be apparent as implementations dynamically 
+                choose the underlying algorithm to use depending upon
+                process count and message size, based on rules in a pre-defined
+                configuration file.
 
-        <br><br>
+                <br><br>
 
-        The visualization tool provided here will help you understand these two 
-        <code>MPI_Alltoall</code> algorithms better by displaying them step by step,
-        and providing information on these steps along the way. You can also customize the 
-        input parameters to try out different sizes of data and processes. If you are unsure why a step happened,
-        be sure to check out the information panel provided with the step text.
+                The visualization tool provided here will help you understand these two 
+                <code>MPI_Alltoall</code> algorithms better by displaying them step by step,
+                and providing information on these steps along the way. You can also customize the 
+                input parameters to try out different sizes of data and processes. If you are unsure why a step happened,
+                be sure to check out the information panel provided with the step text.
+            <p>
         `,
         // listed algorithms
         "algorithms": [
@@ -46,12 +48,14 @@ export default {
                 "name": "Bruck",
                 // description text
                 "desc": `
-                    Bruck is an efficient log based MPI_Alltoall communication algorithm that is 
-                    suitable for latency bound short messages. It is log based in the face that the 
-                    number of communication steps is based on Log<sub>2</sub>P, where P is the number 
-                    of processes. Note, that this can be improved by allowing the base (2 in normal Bruck) 
-                    to be paramterized and adjusted from 2 to P-1. This allows Bruck to find an optimal 
-                    balance between latency and bandwidth messages.
+                    <p>
+                        Bruck is an efficient log based MPI_Alltoall communication algorithm that is 
+                        suitable for latency bound short messages. It is log based in the face that the 
+                        number of communication steps is based on Log<sub>2</sub>P, where P is the number 
+                        of processes. Note, that this can be improved by allowing the base (2 in normal Bruck) 
+                        to be paramterized and adjusted from 2 to P-1. This allows Bruck to find an optimal 
+                        balance between latency and bandwidth messages.
+                    </p>
                 `,
                 // enabled options
                 "options": {
@@ -106,11 +110,13 @@ export default {
                 "id": "1",
                 "name": "Spread Out",
                 "desc": `
-                    In comparision to Bruck, spread-out is an MPI_Alltoall algorithm 
-                    that takes a linear number of communication steps based on P, 
-                    the number of processes. This means that spread-out transfers over
-                    more communication steps, making it more suited for longer, 
-                    bandwidth-dominated messages.
+                    <p>
+                        In comparision to Bruck, spread-out is an MPI_Alltoall algorithm 
+                        that takes a linear number of communication steps based on P, 
+                        the number of processes. This means that spread-out transfers over
+                        more communication steps, making it more suited for longer, 
+                        bandwidth-dominated messages.
+                    </p>
                 `,
                 "options": {
                     num_processes: true,

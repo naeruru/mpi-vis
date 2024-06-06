@@ -8,11 +8,11 @@
             <v-card-text class="text-subtitle-1"  v-html="collectives[$route.params.id].body"></v-card-text>
             <v-card-title class="text-wrap">Click on an algorithm below to get started</v-card-title>
             <v-divider></v-divider>
-            <v-expansion-panels variant="inset">
+            <!-- <v-expansion-panels v-model="panel" multiple readonly>
                 <v-expansion-panel v-for="algorithm in collectives[$route.params.id].algorithms">
                     <v-expansion-panel-title>
                         <template v-slot:default="{ expanded }">
-                            <span class="text-subtitle-1" :class="{'text-primary': expanded}">{{ algorithm.name }}</span>
+                            <span class="text-big" :class="{'text-primary': expanded}">{{ algorithm.name }}</span>
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <v-icon v-if="!expanded" icon="mdi-chevron-down"></v-icon>
@@ -23,7 +23,23 @@
                         <p v-html="algorithm.desc"></p>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-            </v-expansion-panels>
+            </v-expansion-panels> -->
+            <v-card-text v-for="algorithm in collectives[$route.params.id].algorithms" :id="algorithm.name" >
+                <!-- <v-divider class="mb-6"></v-divider> -->
+                <v-row>
+                    <v-col :cols="12" :md="12" :lg="12">
+                        <v-card-title class="text-h5 text-primary">
+                            {{ algorithm.name }}
+                        </v-card-title>
+                        <v-card-text v-html="algorithm.desc" class="text-subtitle-1">
+                        </v-card-text>
+                        <v-card-actions class="justify-end pl-4 pt-0">
+                            <v-btn variant="elevated" color="primary" @click="$router.push({ path: `/vis/${$route.params.id}/${algorithm.id}` })">visualize</v-btn>
+                        </v-card-actions>
+                    </v-col>
+                </v-row>
+                <v-divider class="mt-2"></v-divider>
+            </v-card-text>
             <!-- <apexchart width="100%" :options="chartOptions" :series="collectives[$route.params.id].algorithms" @legendClick="legendClicked"></apexchart> -->
         </v-card>
     </v-container>
@@ -75,3 +91,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.text-big {
+    font-size: 18px;
+}
+</style>

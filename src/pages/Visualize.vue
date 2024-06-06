@@ -221,7 +221,7 @@
       </div>
       <div class="d-flex w-100 align-center">
 
-        <v-btn class="d-none d-md-flex" icon size="x-small" variant="outlined" @click="statesStore.drawer = !statesStore.drawer">
+        <v-btn class="d-none d-md-flex mr-1" icon size="x-small" color="primary" variant="outlined" @click="statesStore.drawer = !statesStore.drawer">
           <v-icon>mdi-help</v-icon>
         </v-btn>
 

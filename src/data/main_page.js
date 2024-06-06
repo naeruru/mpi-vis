@@ -3,13 +3,15 @@ export default {
     title: "MPI All to All Visualizer",
     // main page text
     body: `
-        Message passing interface (MPI) is a communication protocol standard designed to function on parallel computing architectures. 
-        Within MPI, there are many different types of collective routines, such as <code>MPI_Alltoall</code>, that facilitates different ways to pass data between processes.
-        You can find standard implementations of MPI collectives in libraries like <a href="https://www.mpich.org/" class="text-decoration-none" target="_blank">MPICH</a> and
-        <a href="https://www.open-mpi.org/" class="text-decoration-none" target="_blank">Open-MPI</a>. This website was created to help people explore MPI collectives, 
-        starting with <code>MPI_Alltoall</code>. With this website, we hope to provide an intuitive understanding of the actual implementation of collectives like <code>MPI_Alltoall</code>. 
-        This interactive web based tool will help you visualize MPI algorithms step by step, and provide information as you go (at any pace you desire!).
-        <strong>Click on a collective in the sidebar to get started.</strong>
+        <p>
+            Message passing interface (MPI) is a communication protocol standard designed to function on parallel computing architectures. 
+            Within MPI, there are many different types of collective routines, such as <code>MPI_Alltoall</code>, that facilitates different ways to pass data between processes.
+            You can find standard implementations of MPI collectives in libraries like <a href="https://www.mpich.org/" class="text-decoration-none" target="_blank">MPICH</a> and
+            <a href="https://www.open-mpi.org/" class="text-decoration-none" target="_blank">Open-MPI</a>. This website was created to help people explore MPI collectives, 
+            starting with <code>MPI_Alltoall</code>. With this website, we hope to provide an intuitive understanding of the actual implementation of collectives like <code>MPI_Alltoall</code>. 
+            This interactive web based tool will help you visualize MPI algorithms step by step, and provide information as you go (at any pace you desire!).
+            <strong>Click on a collective in the sidebar to get started.</strong>
+        </p>
     `,
     // main page publication text
     publications: [
