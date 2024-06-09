@@ -50,11 +50,75 @@ export default {
                 "desc": `
                     <p>
                         Bruck is an efficient log based MPI_Alltoall communication algorithm that is 
-                        suitable for latency bound short messages. It is log based in the face that the 
+                        suitable for latency bound short messages. It is log based in the sense that the 
                         number of communication steps is based on Log<sub>2</sub>P, where P is the number 
-                        of processes. Note, that this can be improved by allowing the base (2 in normal Bruck) 
-                        to be paramterized and adjusted from 2 to P-1. This allows Bruck to find an optimal 
-                        balance between latency and bandwidth messages.
+                        of processes. The overall setup of Bruck involves an initial rotation phase, the 
+                        communication steps, and a final rotation phase to put it in order.
+                    </p>
+                `,
+                // enabled options
+                "options": {
+                    num_processes: true,
+                    block_size: true,
+                    radix: false,
+                    binary: true,
+                    graph: false,
+                },
+                // graph data
+                "data": [[2, 1], [4, 2], [8, 3], [16, 4], [32, 5]],
+                // whether or not the algorithm has multiple schemes
+                "scheme": ["Uniform", "Nonuniform"],
+                // step info menu text (html syntax)
+                // you can append customized info to these in the algorithm steps (./helpers/collectives/)
+                "info": {
+                    // 'initial' is required
+                    "initial": `
+                        Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
+                        <br>
+                        - Initial data rotation phase<br>
+                        - Communication phase (controlled by <code>P</code> and <code>r</code>)<br>
+                        - Final data rotation phase<br>
+                        
+                    `,
+                    "rotationphase": `
+
+                        The initial rotation phase performs a local
+                        copy and moves the data up by <code>p</code> (the rank of the process)
+                        data-blocks from the send buffer <code>S</code> to the receive buffer R.
+                        After that, the data-block to be sent to itself is at the top of
+                        the receive buffer <code>R</code>. This formula is as follows:
+                        <br><br>
+                        <center><code>S[i] = S[i+p] (p: rank)</code></center>
+                    `,
+                    "commstep": `
+                        In each communication step <code>k</code>, process <code>i</code> sends to rank (<code>i + 2<sup>k</sup></code>) all the data blocks whose <code>k</code>th bit is 1, 
+                        receives data from rank (<code>i − 2<sup>k</sup></code>), and stores the incoming data into blocks whose <code>k</code>th bit is 1 (that is, 
+                        overwriting the data that was just sent).
+                    `,
+                    "commstep_radix": `
+                            todo
+                    `,
+                    "final": `
+                        All processes have received the correct data. However, it was not in the right order. Thus, a local inverse shift of data blocks from R to R:
+                        <br><br>
+                        <code>Reverse: R[i] = R[p - i] % P</code>.
+                    `
+                }
+            },
+            {
+                // used for routing, and other in place variables
+                "id": "1",
+                // used for display name
+                "name": "Radix-r Bruck",
+                // description text
+                "desc": `
+                    <p>
+                        Radix-r Bruck is a modified version of Bruck that allows the base (2 in normal Bruck) 
+                        to be paramterized and adjusted from 2 to P-1. While Bruck is good for latency bound 
+                        messages, this modification allows Radix-r Bruck to find an optimal 
+                        balance between latency and bandwidth messages. When r is equal to 2, it is equivalent 
+                        to the stand implementation of Bruck. When r is P-1, it is similar to the bandwidth 
+                        optimized spread-out algorithm.
                     </p>
                 `,
                 // enabled options
@@ -107,8 +171,8 @@ export default {
                 }
             },
             {
-                "id": "1",
-                "name": "Spread Out",
+                "id": "2",
+                "name": "Spread-out",
                 "desc": `
                     <p>
                         In comparision to Bruck, spread-out is an MPI_Alltoall algorithm 
