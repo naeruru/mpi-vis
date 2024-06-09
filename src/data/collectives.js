@@ -73,7 +73,7 @@ export default {
                 "info": {
                     // 'initial' is required
                     "initial": `
-                        Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
+                        Data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
                         - Communication phase (controlled by <code>P</code> and <code>r</code>)<br>
@@ -138,7 +138,7 @@ export default {
                 "info": {
                     // 'initial' is required
                     "initial": `
-                        Initial data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
+                        Data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
                         - Communication phase (controlled by <code>P</code> and <code>r</code>)<br>
