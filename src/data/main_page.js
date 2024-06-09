@@ -16,6 +16,11 @@ export default {
     // main page publication text
     publications: [
         {
+            title: 'A Visual Guide to MPI All-to-all',
+            author: 'N. Netterville, K. Fan, S. Kumar, and T. Gilray',
+            link: 'https://ieeexplore.ieee.org/document/10056562'
+        },
+        {
             title: 'Optimizing the bruck algorithm for non-uniform all-to-all communication',
             author: 'K. Fan, T. Gilray, V. Pascucci, X. Huang, K. Micinski, and S. Kumar',
             link: 'https://dl.acm.org/doi/abs/10.1145/3502181.3531468'
