@@ -118,7 +118,8 @@ export default {
                         messages, this modification allows Radix-r Bruck to find an optimal 
                         balance between latency and bandwidth messages. When r is equal to 2, it is equivalent 
                         to the stand implementation of Bruck. When r is P-1, it is similar to the bandwidth 
-                        optimized spread-out algorithm.
+                        optimized spread-out algorithm. A graph is provided in the info panel to visualize 
+                        examples at higher process counts to show that an optimal radix r exists.
                     </p>
                 `,
                 // enabled options
