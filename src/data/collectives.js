@@ -109,15 +109,15 @@ export default {
                 // used for routing, and other in place variables
                 "id": "1",
                 // used for display name
-                "name": "Radix-r Bruck",
+                "name": "Tunable Radix Algorithm",
                 // description text
                 "desc": `
                     <p>
-                        Radix-r Bruck is a modified version of Bruck that allows the base (2 in normal Bruck) 
+                        The tunable radix algorithm (TRA) is a modified version of Bruck that allows the base (2 in normal Bruck) 
                         to be paramterized and adjusted from 2 to P-1. While Bruck is good for latency bound 
-                        messages, this modification allows Radix-r Bruck to find an optimal 
+                        messages, this modification allows TRA to find an optimal 
                         balance between latency and bandwidth messages. When r is equal to 2, it is equivalent 
-                        to the stand implementation of Bruck. When r is P-1, it is similar to the bandwidth 
+                        to the standard implementation of Bruck. When r is P-1, it is similar to the bandwidth 
                         optimized spread-out algorithm. A graph is provided in the info panel to visualize 
                         examples at higher process counts to show that an optimal radix r exists.
                     </p>
@@ -139,7 +139,7 @@ export default {
                 "info": {
                     // 'initial' is required
                     "initial": `
-                        Data state has been initialized. Bruck's algorithm, in its original form, requires three phases: 
+                        Data state has been initialized. TRA, a modified verison of Bruck, requires three phases: 
                         <br>
                         - Initial data rotation phase<br>
                         - Communication phase (controlled by <code>P</code> and <code>r</code>)<br>
