@@ -17,3 +17,6 @@ Use `npm install` to download dependencies. Then, run the application with `npm 
 
 ### Building the Project
 Build the project with `npm run build`. Files will be compiled to `dist/`.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
